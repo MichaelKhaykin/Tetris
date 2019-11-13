@@ -9,7 +9,10 @@ namespace Tetris
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-     
+
+        public static int GridWidth = 10;
+        public static int GridHeight = 20;
+
         public static Texture2D Pixel;
 
         public Game1()
@@ -49,8 +52,12 @@ namespace Tetris
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            InputManager.KeyboardState = Keyboard.GetState();
+
             ScreenManager.Update(gameTime);
-            
+
+            InputManager.OldKeyboardState = InputManager.KeyboardState;
+
             base.Update(gameTime);
         }
         protected override void Draw(GameTime gameTime)

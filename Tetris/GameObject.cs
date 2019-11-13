@@ -10,9 +10,9 @@ namespace Tetris
 {
     public abstract class GameObject
     {
-        public Vector2 Position { get; set; }
+        public virtual Vector2 Position { get; set; }
         public Color Color { get; set; }
-        public float Rotation { get; set; }
+        public virtual float Rotation { get; set; }
         public Vector2 Scale { get; set; }
         public Vector2 Origin { get; set; }
         public float LayerDepth { get; set; }

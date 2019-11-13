@@ -34,7 +34,7 @@ namespace Tetris
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, Position, null, Color, Rotation, Origin, Scale, Effects, LayerDepth);
+            spriteBatch.Draw(Texture, Position, null, Color, MathHelper.ToRadians(Rotation), Origin, Scale, Effects, LayerDepth);
 
             if (IsDebug)
             {

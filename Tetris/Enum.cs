@@ -12,14 +12,11 @@ namespace Tetris
         Game
     }
 
-    public enum TetrominoType
-    { 
-        Straight,
-        LeftL,
-        RightL,
-        Square,
-        RightZigZag,
-        LeftZigZag,
-        SmallT
+    public enum RotationOptions
+    {
+        NoRotation = 0,
+        NintyDegrees = 90,
+        HundredEightyDegrees = 180,
+        TwoHundredSeventyDegrees = 270
     }
 }

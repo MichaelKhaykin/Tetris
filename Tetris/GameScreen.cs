@@ -6,44 +6,47 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Tetris.TestOfEachPiece;
 
 namespace Tetris
 {
     public class GameScreen : Screen
     {
-        bool[,] grid = new bool[20, 10];
-        Vector2 offSet;
-
-        Queue<Tetromino> nextPieces = new Queue<Tetromino>();
-
-        Tetromino lPiece;
-        Tetromino rPiece;
+        bool[,] grid = new bool[Game1.GridHeight, Game1.GridWidth];
+        public static Vector2 offSet;
 
         TimeSpan moveDownTimer = TimeSpan.FromMilliseconds(750);
         TimeSpan elapsedMoveDownTime = TimeSpan.Zero;
+
+        StraightPiece straightPiece;
         public GameScreen(ContentManager content, GraphicsDeviceManager graphics) 
             : base(content, graphics)
         {
             offSet = new Vector2((Graphics.GraphicsDevice.Viewport.Width - grid.GetLength(1) * Globals.CellSize) / 2, 0);
 
-            lPiece = new Tetromino(content.Load<Texture2D>("leftLPiece"), new Vector2(0, 0), Color.White, Vector2.One, TetrominoType.LeftL);
+            //    lPiece = new Tetromino(content.Load<Texture2D>("leftLPiece"), new Vector2(0, 0), Color.White, Vector2.One, TetrominoType.LeftL);
             //rPiece = new Tetromino(content.Load<Texture2D>("rightLPiece"), new Vector2(2, 2), Color.White, Vector2.One, TetrominoType.RightL);
 
-            AddToDrawList(lPiece);
-         //   AddToDrawList(rPiece);
+            //  AddToDrawList(lPiece);
+            //   AddToDrawList(rPiece);
+
+
+            straightPiece = new StraightPiece(Content.Load<Texture2D>("straightPiece"), new Vector2(0, 0), Color.White, Vector2.One, RotationOptions.NintyDegrees);
         }
 
         public override void Update(GameTime gameTime)
         {
             elapsedMoveDownTime += gameTime.ElapsedGameTime;
 
+            straightPiece.Update(gameTime);
+
             if(elapsedMoveDownTime >= moveDownTimer)
             {
                 elapsedMoveDownTime = TimeSpan.Zero;
-                lPiece.GridPosition = new Vector2(lPiece.GridPosition.X, lPiece.GridPosition.Y + 1);
+       //         lPiece.GridPosition = new Vector2(lPiece.GridPosition.X, lPiece.GridPosition.Y + 1);
             }
 
-            lPiece.Update(gameTime, offSet);
+         //   lPiece.Update(gameTime, offSet);
        //     rPiece.Update(gameTime, offSet);
 
             base.Update(gameTime);
@@ -60,7 +63,8 @@ namespace Tetris
             {
                 spriteBatch.Draw(Game1.Pixel, new Rectangle(j * Globals.CellSize + (int)offSet.X, 0, 1,  Graphics.GraphicsDevice.Viewport.Height), Color.White); 
             }
-            
+
+            straightPiece.Draw(spriteBatch);
 
             base.Draw(spriteBatch);
         }
