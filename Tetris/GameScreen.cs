@@ -19,21 +19,25 @@ namespace Tetris
         TimeSpan elapsedMoveDownTime = TimeSpan.Zero;
 
         StraightPiece straightPiece;
+        Square square;
         public GameScreen(ContentManager content, GraphicsDeviceManager graphics) 
             : base(content, graphics)
         {
-            offSet = new Vector2((Graphics.GraphicsDevice.Viewport.Width - grid.GetLength(1) * Globals.CellSize) / 2, 0);
+            offSet = new Vector2((Graphics.GraphicsDevice.Viewport.Width - grid.GetLength(1) * Game1.GridCellSize) / 2, 0);
 
-      
+
             straightPiece = new StraightPiece(Content.Load<Texture2D>("straightPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NintyDegrees);
+
+            square = new Square(Content.Load<Texture2D>("squarePiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
         }
 
         public override void Update(GameTime gameTime)
         {
             elapsedMoveDownTime += gameTime.ElapsedGameTime;
 
-            straightPiece.Update(gameTime);
-
+           // straightPiece.Update(gameTime);
+            square.Update(gameTime);
+            
             base.Update(gameTime);
         }
         public override void Draw(SpriteBatch spriteBatch)
@@ -41,15 +45,16 @@ namespace Tetris
             
             for(int i = 0; i < grid.GetLength(0) + 1; i++)
             {
-                spriteBatch.Draw(Game1.Pixel, new Rectangle((int)offSet.X, i * Globals.CellSize, grid.GetLength(1) * Globals.CellSize, 1), Color.White);
+                spriteBatch.Draw(Game1.Pixel, new Rectangle((int)offSet.X, i * Game1.GridCellSize, grid.GetLength(1) * Game1.GridCellSize, 1), Color.White);
             }
 
             for(int j = 0; j < grid.GetLength(1) + 1; j++)
             {
-                spriteBatch.Draw(Game1.Pixel, new Rectangle(j * Globals.CellSize + (int)offSet.X, 0, 1,  Graphics.GraphicsDevice.Viewport.Height), Color.White); 
+                spriteBatch.Draw(Game1.Pixel, new Rectangle(j * Game1.GridCellSize + (int)offSet.X, 0, 1,  Graphics.GraphicsDevice.Viewport.Height), Color.White); 
             }
 
-            straightPiece.Draw(spriteBatch);
+            square.Draw(spriteBatch);
+           // straightPiece.Draw(spriteBatch);
 
             base.Draw(spriteBatch);
         }

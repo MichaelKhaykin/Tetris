@@ -15,25 +15,24 @@ namespace Tetris.TestOfEachPiece
             get
             {
                 //calculate actual position based off of grid position and rotation
-
-                Vector2 position = new Vector2(GridPosition.X * 35 + GameScreen.offSet.X, GridPosition.Y * 35 + GameScreen.offSet.Y);
+                Vector2 position = new Vector2(GridPosition.X * Game1.GridCellSize + GameScreen.offSet.X, GridPosition.Y * Game1.GridCellSize + GameScreen.offSet.Y);
 
                 switch(RotationOption)
                 {
                     case RotationOptions.NoRotation:
-                        position += new Vector2(Texture.Width / 2, Texture.Height / 2 + 35);
+                        position += new Vector2(Texture.Width / 2, Texture.Height / 2 + Game1.GridCellSize);
                         break;
 
                     case RotationOptions.HundredEightyDegrees:
-                        position += new Vector2(Texture.Width / 2, Texture.Height / 2 + 70);
+                        position += new Vector2(Texture.Width / 2, Texture.Height / 2 + Game1.GridCellSize * 2);
                         break;
 
                     case RotationOptions.NintyDegrees:
-                        position += new Vector2(Texture.Height / 2 + 35, Texture.Width / 2);
+                        position += new Vector2(Texture.Height / 2 + Game1.GridCellSize, Texture.Width / 2);
                         break;
                             
                     case RotationOptions.TwoHundredSeventyDegrees:
-                        position += new Vector2(Texture.Height / 2 + 70, Texture.Width / 2);
+                        position += new Vector2(Texture.Height / 2 + Game1.GridCellSize * 2, Texture.Width / 2);
                         break;
                 }
 
@@ -43,8 +42,6 @@ namespace Tetris.TestOfEachPiece
         public StraightPiece(Texture2D texture, Point gridPosition, Color color, Vector2 scale, RotationOptions rotationOption) 
             : base(texture, gridPosition, color, scale, rotationOption)
         {
-            GridPosition = gridPosition;
-
             Shape = new Dictionary<RotationOptions, int[,]>()
             {
                 [RotationOptions.NoRotation] = new int[,]
