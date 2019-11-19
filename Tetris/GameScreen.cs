@@ -24,14 +24,8 @@ namespace Tetris
         {
             offSet = new Vector2((Graphics.GraphicsDevice.Viewport.Width - grid.GetLength(1) * Globals.CellSize) / 2, 0);
 
-            //    lPiece = new Tetromino(content.Load<Texture2D>("leftLPiece"), new Vector2(0, 0), Color.White, Vector2.One, TetrominoType.LeftL);
-            //rPiece = new Tetromino(content.Load<Texture2D>("rightLPiece"), new Vector2(2, 2), Color.White, Vector2.One, TetrominoType.RightL);
-
-            //  AddToDrawList(lPiece);
-            //   AddToDrawList(rPiece);
-
-
-            straightPiece = new StraightPiece(Content.Load<Texture2D>("straightPiece"), new Vector2(0, 0), Color.White, Vector2.One, RotationOptions.NintyDegrees);
+      
+            straightPiece = new StraightPiece(Content.Load<Texture2D>("straightPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NintyDegrees);
         }
 
         public override void Update(GameTime gameTime)
@@ -39,15 +33,6 @@ namespace Tetris
             elapsedMoveDownTime += gameTime.ElapsedGameTime;
 
             straightPiece.Update(gameTime);
-
-            if(elapsedMoveDownTime >= moveDownTimer)
-            {
-                elapsedMoveDownTime = TimeSpan.Zero;
-       //         lPiece.GridPosition = new Vector2(lPiece.GridPosition.X, lPiece.GridPosition.Y + 1);
-            }
-
-         //   lPiece.Update(gameTime, offSet);
-       //     rPiece.Update(gameTime, offSet);
 
             base.Update(gameTime);
         }
