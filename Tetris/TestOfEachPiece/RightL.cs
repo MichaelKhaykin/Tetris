@@ -19,16 +19,16 @@ namespace Tetris.TestOfEachPiece
                 switch (RotationOption)
                 {
                     case RotationOptions.NoRotation:
-                        position += new Vector2(Game1.GridCellSize * 2, Texture.Height / 2);
+                        position += new Vector2(Game1.GridCellSize, Texture.Height / 2);
                         break;
                     case RotationOptions.NintyDegrees:
-                        position += new Vector2(Game1.GridCellSize * 1 / 2 + Game1.GridCellSize * 2, Game1.GridCellSize);
+                        position += new Vector2(Game1.GridCellSize * 1 / 2 + Game1.GridCellSize, Game1.GridCellSize);
                         break;
                     case RotationOptions.HundredEightyDegrees:
-                        position += new Vector2(Game1.GridCellSize * 2, Game1.GridCellSize / 2 + Game1.GridCellSize);
+                        position += new Vector2(Game1.GridCellSize, Game1.GridCellSize / 2 + Game1.GridCellSize);
                         break;
                     case RotationOptions.TwoHundredSeventyDegrees:
-                        position += new Vector2(Game1.GridCellSize * 5 / 2, Game1.GridCellSize);
+                        position += new Vector2(Game1.GridCellSize * 3 / 2, Game1.GridCellSize);
                         break;
                 }
 
@@ -42,31 +42,27 @@ namespace Tetris.TestOfEachPiece
             {
                 [RotationOptions.NoRotation] = new int[,]
                 {
-                    { 0, 0, 1, 0 },
-                    { 0, 0, 1, 0 },
-                    { 0, 1, 1, 0 },
-                    { 0, 0, 0, 0 }
+                    { 0, 1, 0 },
+                    { 0, 1, 0 },
+                    { 1, 1, 0 },
                 },
                 [RotationOptions.NintyDegrees] = new int[,]
                 {
-                    { 0, 1, 0, 0 },
-                    { 0, 1, 1, 1 },
-                    { 0, 0, 0, 0 },
-                    { 0, 0, 0, 0 }
+                    { 1, 0, 0 },
+                    { 1, 1, 1 },
+                    { 0, 0, 0 },
                 },
                 [RotationOptions.HundredEightyDegrees] = new int[,]
                 {
-                    { 0, 1, 1, 0 },
-                    { 0, 1, 0, 0 },
-                    { 0, 1, 0, 0 },
-                    { 0, 0, 0, 0 }
+                    { 0, 1, 1  },
+                    { 0, 1, 0  },
+                    { 0, 1, 0  },
                 },
                 [RotationOptions.TwoHundredSeventyDegrees] = new int[,]
                 {
-                    { 0, 0, 0, 0 },
-                    { 1, 1, 1, 0 },
-                    { 0, 0, 1, 0 },
-                    { 0, 0, 0, 0 }
+                    { 1, 1, 1  },
+                    { 0, 0, 1  },
+                    { 0, 0, 0  }
                 }
             };
         }

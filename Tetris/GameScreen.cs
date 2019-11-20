@@ -32,9 +32,9 @@ namespace Tetris
 
             square = new Square(Content.Load<Texture2D>("squarePiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
 
-            leftLPiece = new LeftL(Content.Load<Texture2D>("leftLPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
+            leftLPiece = new LeftL(Content.Load<Texture2D>("leftLPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.TwoHundredSeventyDegrees);
 
-            rightLPiece = new RightL(Content.Load<Texture2D>("rightLPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
+            rightLPiece = new RightL(Content.Load<Texture2D>("rightLPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.TwoHundredSeventyDegrees);
 
             leftZigZag = new LeftZigZag(Content.Load<Texture2D>("leftZigZagPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
         }
@@ -45,9 +45,9 @@ namespace Tetris
 
             // straightPiece.Update(gameTime);
             //square.Update(gameTime);
-            //leftLPiece.Update(gameTime);
+            leftLPiece.Update(gameTime);
             //rightLPiece.Update(gameTime);
-            leftZigZag.Update(gameTime);
+            //leftZigZag.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -66,9 +66,9 @@ namespace Tetris
 
             //square.Draw(spriteBatch);
             //straightPiece.Draw(spriteBatch);
-            //leftLPiece.Draw(spriteBatch);
+            leftLPiece.Draw(spriteBatch);
             //rightLPiece.Draw(spriteBatch);
-            leftZigZag.Draw(spriteBatch);
+            //leftZigZag.Draw(spriteBatch);
 
             base.Draw(spriteBatch);
         }
