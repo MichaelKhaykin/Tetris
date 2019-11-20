@@ -53,6 +53,8 @@
     <Compile Include="ScreenManager.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="TestOfEachPiece\BaseTetromino.cs" />
+    <Compile Include="TestOfEachPiece\LeftL.cs" />
+    <Compile Include="TestOfEachPiece\RightL.cs" />
     <Compile Include="TestOfEachPiece\Square.cs" />
     <Compile Include="TestOfEachPiece\StraightPiece.cs" />
     <Compile Include="TextLabel.cs" />
