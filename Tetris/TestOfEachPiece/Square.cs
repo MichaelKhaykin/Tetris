@@ -16,7 +16,7 @@ namespace Tetris.TestOfEachPiece
             {
                 //calculate actual position based off of grid position and rotation
                 Vector2 position = new Vector2(GridPosition.X * Game1.GridCellSize + GameScreen.offSet.X, GridPosition.Y * Game1.GridCellSize + GameScreen.offSet.Y);
-                position += new Vector2(Texture.Height / 2 + Game1.GridCellSize, Texture.Width / 2 + Game1.GridCellSize);
+                position += new Vector2(Texture.Height / 2, Texture.Width / 2);
                 return position;
             }
         }
@@ -26,31 +26,23 @@ namespace Tetris.TestOfEachPiece
             {
                 [RotationOption = RotationOptions.NoRotation] = new int[,]
                 {
-                    { 0, 0, 0, 0 },
-                    { 0, 1, 1, 0 },
-                    { 0, 1, 1, 0 },
-                    { 0, 0, 0, 0 }
+                    { 1, 1 },
+                    { 1, 1 },
                 },
                 [RotationOption = RotationOptions.HundredEightyDegrees] = new int[,]
                 {
-                    { 0, 0, 0, 0 },
-                    { 0, 1, 1, 0 },
-                    { 0, 1, 1, 0 },
-                    { 0, 0, 0, 0 }
+                    { 1, 1 },
+                    { 1, 1 },
                 },
                 [RotationOption = RotationOptions.NintyDegrees] = new int[,]
                 {
-                    { 0, 0, 0, 0 },
-                    { 0, 1, 1, 0 },
-                    { 0, 1, 1, 0 },
-                    { 0, 0, 0, 0 }
+                    { 1, 1 },
+                    { 1, 1 },
                 },
                 [RotationOption = RotationOptions.TwoHundredSeventyDegrees] = new int[,]
                 {
-                    { 0, 0, 0, 0 },
-                    { 0, 1, 1, 0 },
-                    { 0, 1, 1, 0 },
-                    { 0, 0, 0, 0 }
+                    { 1, 1 },
+                    { 1, 1 },
                 },
             };
         }
