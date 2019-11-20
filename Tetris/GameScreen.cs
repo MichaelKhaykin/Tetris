@@ -22,7 +22,8 @@ namespace Tetris
         Square square;
         LeftL leftLPiece;
         RightL rightLPiece;
-        public GameScreen(ContentManager content, GraphicsDeviceManager graphics) 
+        LeftZigZag leftZigZag;
+        public GameScreen(ContentManager content, GraphicsDeviceManager graphics)
             : base(content, graphics)
         {
             offSet = new Vector2((Graphics.GraphicsDevice.Viewport.Width - grid.GetLength(1) * Game1.GridCellSize) / 2, 0);
@@ -34,6 +35,8 @@ namespace Tetris
             leftLPiece = new LeftL(Content.Load<Texture2D>("leftLPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
 
             rightLPiece = new RightL(Content.Load<Texture2D>("rightLPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
+
+            leftZigZag = new LeftZigZag(Content.Load<Texture2D>("leftZigZagPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
         }
 
         public override void Update(GameTime gameTime)
@@ -43,7 +46,8 @@ namespace Tetris
             // straightPiece.Update(gameTime);
             //square.Update(gameTime);
             //leftLPiece.Update(gameTime);
-            rightLPiece.Update(gameTime);
+            //rightLPiece.Update(gameTime);
+            leftZigZag.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -61,9 +65,10 @@ namespace Tetris
             }
 
             //square.Draw(spriteBatch);
-            // straightPiece.Draw(spriteBatch);
+            //straightPiece.Draw(spriteBatch);
             //leftLPiece.Draw(spriteBatch);
-            rightLPiece.Draw(spriteBatch);
+            //rightLPiece.Draw(spriteBatch);
+            leftZigZag.Draw(spriteBatch);
 
             base.Draw(spriteBatch);
         }
