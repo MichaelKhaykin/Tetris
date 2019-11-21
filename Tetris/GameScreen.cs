@@ -15,7 +15,7 @@ namespace Tetris
         public static bool[,] grid = new bool[Game1.GridHeight, Game1.GridWidth];
         public static Vector2 offSet;
 
-        Stack<BaseTetromino> nextTiles = new Stack<BaseTetromino>();
+        List<BaseTetromino> nextTiles = new List<BaseTetromino>();
 
         List<BaseTetromino> boomers = new List<BaseTetromino>();
 
@@ -26,50 +26,53 @@ namespace Tetris
         {
             offSet = new Vector2((Graphics.GraphicsDevice.Viewport.Width - grid.GetLength(1) * Game1.GridCellSize) / 2, 0);
 
-            for(int i = 3; i >= 0; i--)
+            for(int i = 0; i < 3; i++)
             {
-                var pieceTypeToCreate = (PieceTypes)Game1.Random.Next(0, 6);
-                var startPoint = new Point(-4, i * 4);
-                BaseTetromino newPiece = null;
-                switch (pieceTypeToCreate)
-                {
-                    case PieceTypes.LL:
-                        newPiece = new LeftL(Content.Load<Texture2D>("leftLPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-                    
-                    case PieceTypes.RL:
-                        newPiece = new RightL(Content.Load<Texture2D>("rightLPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-                    
-                    case PieceTypes.T:
-                        newPiece = new TPiece(Content.Load<Texture2D>("smallTPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-                    
-                    case PieceTypes.LZZ:
-                        newPiece = new LeftZigZag(Content.Load<Texture2D>("leftZigZagPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-                    
-                    case PieceTypes.RZZ:
-                        newPiece = new RightZigZag(Content.Load<Texture2D>("rightZigZagPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-            
-                    case PieceTypes.Square:
-                        newPiece = new Square(Content.Load<Texture2D>("squarePiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-
-                    case PieceTypes.Straight:
-                        newPiece = new StraightPiece(Content.Load<Texture2D>("straightPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-                }
-
-                nextTiles.Push(newPiece);
+                nextTiles.Add(GeneratePiece(i));
             }
 
-            current = nextTiles.Last();
-            nextTiles.AsEnumerable().ToList().Remove(nextTiles.Last());
+            current = GeneratePiece(0);
             current.GridPosition = new Point(4, -3);
         }   
 
+        private BaseTetromino GeneratePiece(int i)
+        {
+            var pieceTypeToCreate = (PieceTypes)Game1.Random.Next(0, 6);
+            var startPoint = new Point(-4, i * 4);
+            BaseTetromino newPiece = null;
+            switch (pieceTypeToCreate)
+            {
+                case PieceTypes.LL:
+                    newPiece = new LeftL(Content.Load<Texture2D>("leftLPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    break;
+
+                case PieceTypes.RL:
+                    newPiece = new RightL(Content.Load<Texture2D>("rightLPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    break;
+
+                case PieceTypes.T:
+                    newPiece = new TPiece(Content.Load<Texture2D>("smallTPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    break;
+
+                case PieceTypes.LZZ:
+                    newPiece = new LeftZigZag(Content.Load<Texture2D>("leftZigZagPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    break;
+
+                case PieceTypes.RZZ:
+                    newPiece = new RightZigZag(Content.Load<Texture2D>("rightZigZagPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    break;
+
+                case PieceTypes.Square:
+                    newPiece = new Square(Content.Load<Texture2D>("squarePiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    break;
+
+                case PieceTypes.Straight:
+                    newPiece = new StraightPiece(Content.Load<Texture2D>("straightPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    break;
+            }
+
+            return newPiece;
+        }
         public override void Update(GameTime gameTime)
         {
             current.Update(gameTime);
@@ -78,48 +81,17 @@ namespace Tetris
             {
                 boomers.Add(current);
          
-                current = nextTiles.Pop();
+                current = nextTiles[0];
                 current.GridPosition = new Point(4, -3);
+
+                nextTiles.RemoveAt(0);
 
                 foreach (var tile in nextTiles)
                 {
                     tile.GridPosition.Y -= 4;
                 }
-                var pieceTypeToCreate = (PieceTypes)Game1.Random.Next(0, 6);
-                var startPoint = new Point(-4, 12);
-                BaseTetromino newPiece = null;
-                switch (pieceTypeToCreate)
-                {
-                    case PieceTypes.LL:
-                        newPiece = new LeftL(Content.Load<Texture2D>("leftLPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-
-                    case PieceTypes.RL:
-                        newPiece = new RightL(Content.Load<Texture2D>("rightLPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-
-                    case PieceTypes.T:
-                        newPiece = new TPiece(Content.Load<Texture2D>("smallTPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-
-                    case PieceTypes.LZZ:
-                        newPiece = new LeftZigZag(Content.Load<Texture2D>("leftZigZagPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-
-                    case PieceTypes.RZZ:
-                        newPiece = new RightZigZag(Content.Load<Texture2D>("rightZigZagPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-
-                    case PieceTypes.Square:
-                        newPiece = new Square(Content.Load<Texture2D>("squarePiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-
-                    case PieceTypes.Straight:
-                        newPiece = new StraightPiece(Content.Load<Texture2D>("straightPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                        break;
-                }
-
-                nextTiles.Push(newPiece);
+              
+                nextTiles.Add(GeneratePiece(2));
             }
 
             base.Update(gameTime);
