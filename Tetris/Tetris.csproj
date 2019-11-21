@@ -56,8 +56,10 @@
     <Compile Include="TestOfEachPiece\LeftL.cs" />
     <Compile Include="TestOfEachPiece\LeftZigZag.cs" />
     <Compile Include="TestOfEachPiece\RightL.cs" />
+    <Compile Include="TestOfEachPiece\RightZigZag.cs" />
     <Compile Include="TestOfEachPiece\Square.cs" />
     <Compile Include="TestOfEachPiece\StraightPiece.cs" />
+    <Compile Include="TestOfEachPiece\TPiece.cs" />
     <Compile Include="TextLabel.cs" />
   </ItemGroup>
   <ItemGroup>
