@@ -61,38 +61,70 @@ namespace Tetris.TestOfEachPiece
 
             return new List<int>[] { xSpots, ySpots };
         }
+
+        private void FillSpot()
+        {
+            IsEnabled = false;
+
+            var array = Shape[RotationOption];
+            int yLength = array.GetLength(0);
+            int xLength = array.GetLength(1);
+            for (int w = 0; w < yLength; w++)
+            {
+                for (int z = 0; z < xLength; z++)
+                {
+                    if (array[w, z] == 1)
+                    {
+                        GameScreen.grid[GridPosition.Y + w, GridPosition.X + z] = true;
+                    }
+                }
+            }
+        }
         public new virtual void Update(GameTime gameTime)
         {
             if (IsEnabled == false) return;
 
-            var ySpots = GetMarkedSpots(RotationOption, Shape)[1];
+            var spots = GetMarkedSpots(RotationOption, Shape);
 
+            var ySpots = spots[1];
             var y = ySpots.OrderByDescending(w => w).First() + GridPosition.Y + 1;
-            if (y >= Game1.GridHeight) // also disable tile if it is going on a tile that is also filled
-            {
-                IsEnabled = false;
 
-                var array = Shape[RotationOption];
-                int yLength = array.GetLength(0);
-                int xLength = array.GetLength(1);
-                for (int w = 0; w < yLength; w++)
+            if (GridPosition.Y >= -1)
+            {
+                for (int i = 0; i < spots[0].Count; i++)
                 {
-                    for(int z = 0; z < xLength; z++)
+                    if (spots[1][i] + GridPosition.Y + 1 >= GameScreen.grid.GetLength(0)) continue;
+
+                    if (GameScreen.grid[spots[1][i] + GridPosition.Y + 1, spots[0][i] + GridPosition.X] == true)
                     {
-                        if(array[w, z] == 1)
-                        {
-                            GameScreen.grid[GridPosition.Y + w, GridPosition.X + z] = true;
-                        }
+                        FillSpot();
                     }
+                    
                 }
+            }
+                
+            if (y >= Game1.GridHeight) 
+            {
+                FillSpot();
             }
 
             if (InputManager.KeyboardState.IsKeyDown(Keys.Down) && InputManager.OldKeyboardState.IsKeyUp(Keys.Down))
             {
                 GridPosition.Y += 1;
+                elapsedMoveDownTime = TimeSpan.Zero;
             }
             if (InputManager.KeyboardState.IsKeyDown(Keys.Left) && InputManager.OldKeyboardState.IsKeyUp(Keys.Left))
             {
+                for (int i = 0; i < spots[0].Count; i++)
+                {
+                    if (spots[0][i] + GridPosition.X - 1 < 0 || GridPosition.Y < 0) continue;
+
+                    if (GameScreen.grid[spots[1][i] + GridPosition.Y, spots[0][i] + GridPosition.X - 1] == true)
+                    {
+                        return;
+                    }
+                }
+
                 var xSpot = CalculateClosestPointOnShape(RotationOption, Shape) - 1;
 
                 if (xSpot >= 0)
@@ -103,6 +135,16 @@ namespace Tetris.TestOfEachPiece
             }
             if (InputManager.KeyboardState.IsKeyDown(Keys.Right) && InputManager.OldKeyboardState.IsKeyUp(Keys.Right))
             {
+                for (int i = 0; i < spots[0].Count; i++)
+                {
+                    if (spots[0][i] + GridPosition.X + 1 >= GameScreen.grid.GetLength(0) || GridPosition.Y < 0) continue;
+
+                    if (GameScreen.grid[spots[1][i] + GridPosition.Y, spots[0][i] + GridPosition.X + 1] == true)
+                    {
+                        return;
+                    }
+                }
+
                 var xSpot = CalculateFurthestPointOnShape(RotationOption, Shape) + 1;
                 if (xSpot <= Game1.GridWidth)
                 {
@@ -116,11 +158,13 @@ namespace Tetris.TestOfEachPiece
                     case RotationOptions.NoRotation:
                         {
                             var xSpot = CalculateClosestPointOnShape(RotationOptions.NintyDegrees, Shape);
+                            Idk(xSpot, RotationOptions.NintyDegrees);
                             if (xSpot < 0)
                             {
                                 GridPosition.X += Math.Abs(xSpot);
                             }
                             var farSpot = CalculateFurthestPointOnShape(RotationOptions.NintyDegrees, Shape);
+                            Idk2(farSpot, RotationOptions.NintyDegrees);
                             if (farSpot > Game1.GridWidth)
                             {
                                 GridPosition.X -= (farSpot - Game1.GridWidth);
@@ -131,11 +175,13 @@ namespace Tetris.TestOfEachPiece
                     case RotationOptions.NintyDegrees:
                         {
                             var xSpot = CalculateClosestPointOnShape(RotationOptions.HundredEightyDegrees, Shape);
+                            Idk(xSpot, RotationOptions.HundredEightyDegrees);
                             if (xSpot < 0)
                             {
                                 GridPosition.X += Math.Abs(xSpot);
                             }
                             var farSpot = CalculateFurthestPointOnShape(RotationOptions.HundredEightyDegrees, Shape);
+                            Idk2(farSpot, RotationOptions.HundredEightyDegrees);
                             if(farSpot > Game1.GridWidth)
                             {
                                 GridPosition.X -= (farSpot - Game1.GridWidth);
@@ -146,11 +192,13 @@ namespace Tetris.TestOfEachPiece
                     case RotationOptions.HundredEightyDegrees:
                         {
                             var xSpot = CalculateClosestPointOnShape(RotationOptions.TwoHundredSeventyDegrees, Shape);
+                            Idk(xSpot, RotationOptions.TwoHundredSeventyDegrees);
                             if (xSpot < 0)
                             {
                                 GridPosition.X += Math.Abs(xSpot);
                             }
                             var farSpot = CalculateFurthestPointOnShape(RotationOptions.TwoHundredSeventyDegrees, Shape);
+                            Idk2(farSpot, RotationOptions.TwoHundredSeventyDegrees);
                             if (farSpot > Game1.GridWidth)
                             {
                                 GridPosition.X -= (farSpot - Game1.GridWidth);
@@ -161,11 +209,14 @@ namespace Tetris.TestOfEachPiece
                     case RotationOptions.TwoHundredSeventyDegrees:
                         {
                             var xSpot = CalculateClosestPointOnShape(RotationOptions.NoRotation, Shape);
+                            Idk(xSpot, RotationOptions.NoRotation);
                             if (xSpot < 0)
                             {
                                 GridPosition.X += Math.Abs(xSpot);
                             }
+
                             var farSpot = CalculateFurthestPointOnShape(RotationOptions.NoRotation, Shape);
+                            Idk2(farSpot, RotationOptions.NoRotation);
                             if (farSpot > Game1.GridWidth)
                             {
                                 GridPosition.X -= (farSpot - Game1.GridWidth);
@@ -181,6 +232,63 @@ namespace Tetris.TestOfEachPiece
             {
                 GridPosition.Y += 1;
                 elapsedMoveDownTime = TimeSpan.Zero;
+            }
+        }
+
+        private void Idk(int xSpot, RotationOptions rotOption)
+        {
+            if (GridPosition.Y <= 0) return;
+
+            var ySpot = 0;
+            for (int i = 0; i < Shape[rotOption].GetLength(0); i++)
+            {
+                for (int x = 0; x < Shape[rotOption].GetLength(1); x++)
+                {
+                    if (x == xSpot)
+                    {
+                        ySpot = i;
+                    }
+                }
+            }
+
+            if (GameScreen.grid[ySpot + GridPosition.Y, xSpot] == true)
+            {
+                if (GameScreen.grid[ySpot + GridPosition.Y, xSpot + 1] == true)
+                {
+                    GridPosition.X += 2;
+                }
+                else
+                {
+                    GridPosition.X += 1;
+                }
+            }
+        }
+
+        private void Idk2(int farSpot, RotationOptions rotOption)
+        {
+            if (GridPosition.Y <= 0) return;
+            var farYSpot = 0;
+            for (int i = 0; i < Shape[rotOption].GetLength(0); i++)
+            {
+                for (int x = 0; x < Shape[rotOption].GetLength(1); x++)
+                {
+                    if (x == farSpot)
+                    {
+                        farYSpot = i;
+                    }
+                }
+            }
+
+            if (GameScreen.grid[farYSpot + GridPosition.Y, farSpot] == true)
+            {
+                if (GameScreen.grid[farYSpot + GridPosition.Y, farSpot - 1] == true)
+                {
+                    GridPosition.X -= 2;
+                }
+                else
+                {
+                    GridPosition.X -= 1;
+                }
             }
         }
     }

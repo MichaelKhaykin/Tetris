@@ -77,6 +77,8 @@ namespace Tetris
         {
             current.Update(gameTime);
 
+           // for(int i = 0; i < )
+
             if(current.IsEnabled == false)
             {
                 boomers.Add(current);
