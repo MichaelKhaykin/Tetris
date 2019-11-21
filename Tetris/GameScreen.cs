@@ -12,51 +12,59 @@ namespace Tetris
 {
     public class GameScreen : Screen
     {
-        bool[,] grid = new bool[Game1.GridHeight, Game1.GridWidth];
+        public static bool[,] grid = new bool[Game1.GridHeight, Game1.GridWidth];
         public static Vector2 offSet;
 
-        TimeSpan moveDownTimer = TimeSpan.FromMilliseconds(750);
-        TimeSpan elapsedMoveDownTime = TimeSpan.Zero;
-
-        StraightPiece straightPiece;
-        Square square;
-        LeftL leftLPiece;
-        RightL rightLPiece;
-        LeftZigZag leftZigZag;
-        RightZigZag rightZigZag;
-        TPiece tPiece;
+        Queue<BaseTetromino> nextTiles = new Queue<BaseTetromino>();
 
         public GameScreen(ContentManager content, GraphicsDeviceManager graphics)
             : base(content, graphics)
         {
             offSet = new Vector2((Graphics.GraphicsDevice.Viewport.Width - grid.GetLength(1) * Game1.GridCellSize) / 2, 0);
 
-            straightPiece = new StraightPiece(Content.Load<Texture2D>("straightPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
+            for(int i = 0; i < 3; i++)
+            {
+                var pieceTypeToCreate = (PieceTypes)Game1.Random.Next(0, 6);
+                var startPoint = new Point(-4, i * 4);
+                BaseTetromino newPiece = null;
+                switch (pieceTypeToCreate)
+                {
+                    case PieceTypes.LL:
+                        newPiece = new LeftL(Content.Load<Texture2D>("leftLPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                        break;
+                    
+                    case PieceTypes.RL:
+                        newPiece = new RightL(Content.Load<Texture2D>("rightLPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                        break;
+                    
+                    case PieceTypes.T:
+                        newPiece = new TPiece(Content.Load<Texture2D>("smallTPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                        break;
+                    
+                    case PieceTypes.LZZ:
+                        newPiece = new LeftZigZag(Content.Load<Texture2D>("leftZigZagPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                        break;
+                    
+                    case PieceTypes.RZZ:
+                        newPiece = new RightZigZag(Content.Load<Texture2D>("rightZigZagPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                        break;
+            
+                    case PieceTypes.Square:
+                        newPiece = new Square(Content.Load<Texture2D>("squarePiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                        break;
 
-            square = new Square(Content.Load<Texture2D>("squarePiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
+                    case PieceTypes.Straight:
+                        newPiece = new StraightPiece(Content.Load<Texture2D>("straightPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                        break;
+                }
 
-            leftLPiece = new LeftL(Content.Load<Texture2D>("leftLPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
-
-            rightLPiece = new RightL(Content.Load<Texture2D>("rightLPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
-
-            leftZigZag = new LeftZigZag(Content.Load<Texture2D>("leftZigZagPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
-
-            rightZigZag = new RightZigZag(Content.Load<Texture2D>("rightZigZagPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
-
-            tPiece = new TPiece(Content.Load<Texture2D>("smallTPiece"), new Point(0, 0), Color.White, Vector2.One, RotationOptions.NoRotation);
-        }
+                nextTiles.Enqueue(newPiece);
+            }
+        }   
 
         public override void Update(GameTime gameTime)
-        {
-            elapsedMoveDownTime += gameTime.ElapsedGameTime;
+        { 
 
-            // straightPiece.Update(gameTime);
-            //square.Update(gameTime);
-            //leftLPiece.Update(gameTime);
-            //rightLPiece.Update(gameTime);
-            //leftZigZag.Update(gameTime);
-            //rightZigZag.Update(gameTime);
-            tPiece.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -73,13 +81,10 @@ namespace Tetris
                 spriteBatch.Draw(Game1.Pixel, new Rectangle(j * Game1.GridCellSize + (int)offSet.X, 0, 1,  Graphics.GraphicsDevice.Viewport.Height), Color.White); 
             }
 
-            //square.Draw(spriteBatch);
-            //straightPiece.Draw(spriteBatch);
-            //leftLPiece.Draw(spriteBatch);
-            //rightLPiece.Draw(spriteBatch);
-            //leftZigZag.Draw(spriteBatch);
-            //rightZigZag.Draw(spriteBatch);
-            tPiece.Draw(spriteBatch);
+            foreach(var tile in nextTiles)
+            {
+                tile.Draw(spriteBatch);
+            }
 
             base.Draw(spriteBatch);
         }

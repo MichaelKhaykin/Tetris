@@ -63,15 +63,29 @@ namespace Tetris.TestOfEachPiece
         }
         public new virtual void Update(GameTime gameTime)
         {
+            if (IsEnabled == false) return;
+
             var ySpots = GetMarkedSpots(RotationOption, Shape)[1];
 
             var y = ySpots.OrderByDescending(w => w).First() + GridPosition.Y + 1;
-            if (y >= Game1.GridHeight)
+            if (y >= Game1.GridHeight) // also disable tile if it is going on a tile that is also filled
             {
                 IsEnabled = false;
-            }
 
-            if (IsEnabled == false) return;
+                var array = Shape[RotationOption];
+                int yLength = array.GetLength(0);
+                int xLength = array.GetLength(1);
+                for (int w = 0; w < yLength; w++)
+                {
+                    for(int z = 0; z < xLength; z++)
+                    {
+                        if(array[w, z] == 1)
+                        {
+                            GameScreen.grid[GridPosition.Y + w, GridPosition.X + z] = true;
+                        }
+                    }
+                }
+            }
 
             if (InputManager.KeyboardState.IsKeyDown(Keys.Down) && InputManager.OldKeyboardState.IsKeyUp(Keys.Down))
             {
@@ -165,7 +179,7 @@ namespace Tetris.TestOfEachPiece
             elapsedMoveDownTime += gameTime.ElapsedGameTime;
             if (elapsedMoveDownTime >= moveDownTimer)
             {
-                //          GridPosition.Y += 1;
+                GridPosition.Y += 1;
                 elapsedMoveDownTime = TimeSpan.Zero;
             }
         }

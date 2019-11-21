@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Tetris
 {
@@ -13,6 +14,8 @@ namespace Tetris
         public static int GridWidth = 10;
         public static int GridHeight = 20;
         public static int GridCellSize = 35;
+
+        public static Random Random = new Random();
 
         public static Texture2D Pixel;
 

@@ -19,4 +19,15 @@ namespace Tetris
         HundredEightyDegrees = 180,
         TwoHundredSeventyDegrees = 270
     }
+
+    public enum PieceTypes
+    { 
+        LL,
+        RL,
+        T,
+        LZZ,
+        RZZ,
+        Square,
+        Straight
+    }
 }
