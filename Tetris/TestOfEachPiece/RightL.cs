@@ -25,7 +25,7 @@ namespace Tetris.TestOfEachPiece
                         position += new Vector2(Game1.GridCellSize * 1 / 2 + Game1.GridCellSize, Game1.GridCellSize);
                         break;
                     case RotationOptions.HundredEightyDegrees:
-                        position += new Vector2(Game1.GridCellSize, Game1.GridCellSize / 2 + Game1.GridCellSize);
+                        position += new Vector2(Game1.GridCellSize * 2, Game1.GridCellSize / 2 + Game1.GridCellSize);
                         break;
                     case RotationOptions.TwoHundredSeventyDegrees:
                         position += new Vector2(Game1.GridCellSize * 3 / 2, Game1.GridCellSize);

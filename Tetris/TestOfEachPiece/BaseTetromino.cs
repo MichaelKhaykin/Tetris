@@ -11,7 +11,7 @@ namespace Tetris.TestOfEachPiece
 {
     public abstract class BaseTetromino : Sprite
     {
-        public TimeSpan moveDownTimer = TimeSpan.FromMilliseconds(750);
+        public TimeSpan moveDownTimer = TimeSpan.FromMilliseconds(500);
 
         public TimeSpan elapsedMoveDownTime = TimeSpan.Zero;
 
@@ -137,7 +137,7 @@ namespace Tetris.TestOfEachPiece
             {
                 for (int i = 0; i < spots[0].Count; i++)
                 {
-                    if (spots[0][i] + GridPosition.X + 1 >= GameScreen.grid.GetLength(0) || GridPosition.Y < 0) continue;
+                    if (spots[0][i] + GridPosition.X + 1 >= GameScreen.grid.GetLength(1) || GridPosition.Y < 0) continue;
 
                     if (GameScreen.grid[spots[1][i] + GridPosition.Y, spots[0][i] + GridPosition.X + 1] == true)
                     {
@@ -158,16 +158,22 @@ namespace Tetris.TestOfEachPiece
                     case RotationOptions.NoRotation:
                         {
                             var xSpot = CalculateClosestPointOnShape(RotationOptions.NintyDegrees, Shape);
-                            Idk(xSpot, RotationOptions.NintyDegrees);
                             if (xSpot < 0)
                             {
                                 GridPosition.X += Math.Abs(xSpot);
                             }
+                            else
+                            {
+                                Idk(xSpot + 1, RotationOptions.NintyDegrees);
+                            }
                             var farSpot = CalculateFurthestPointOnShape(RotationOptions.NintyDegrees, Shape);
-                            Idk2(farSpot, RotationOptions.NintyDegrees);
                             if (farSpot > Game1.GridWidth)
                             {
                                 GridPosition.X -= (farSpot - Game1.GridWidth);
+                            }
+                            else
+                            {
+                                Idk2(farSpot - 1, RotationOptions.NintyDegrees);
                             }
                             RotationOption = RotationOptions.NintyDegrees;
                         }
@@ -175,16 +181,22 @@ namespace Tetris.TestOfEachPiece
                     case RotationOptions.NintyDegrees:
                         {
                             var xSpot = CalculateClosestPointOnShape(RotationOptions.HundredEightyDegrees, Shape);
-                            Idk(xSpot, RotationOptions.HundredEightyDegrees);
                             if (xSpot < 0)
                             {
                                 GridPosition.X += Math.Abs(xSpot);
                             }
+                            else
+                            {
+                                Idk(xSpot + 1, RotationOptions.HundredEightyDegrees);
+                            }
                             var farSpot = CalculateFurthestPointOnShape(RotationOptions.HundredEightyDegrees, Shape);
-                            Idk2(farSpot, RotationOptions.HundredEightyDegrees);
-                            if(farSpot > Game1.GridWidth)
+                            if (farSpot > Game1.GridWidth)
                             {
                                 GridPosition.X -= (farSpot - Game1.GridWidth);
+                            }
+                            else
+                            {
+                                Idk2(farSpot - 1, RotationOptions.HundredEightyDegrees);
                             }
                             RotationOption = RotationOptions.HundredEightyDegrees;
                         }
@@ -192,16 +204,22 @@ namespace Tetris.TestOfEachPiece
                     case RotationOptions.HundredEightyDegrees:
                         {
                             var xSpot = CalculateClosestPointOnShape(RotationOptions.TwoHundredSeventyDegrees, Shape);
-                            Idk(xSpot, RotationOptions.TwoHundredSeventyDegrees);
                             if (xSpot < 0)
                             {
                                 GridPosition.X += Math.Abs(xSpot);
                             }
+                            else
+                            {
+                                Idk(xSpot + 1, RotationOptions.TwoHundredSeventyDegrees);
+                            }
                             var farSpot = CalculateFurthestPointOnShape(RotationOptions.TwoHundredSeventyDegrees, Shape);
-                            Idk2(farSpot, RotationOptions.TwoHundredSeventyDegrees);
                             if (farSpot > Game1.GridWidth)
                             {
                                 GridPosition.X -= (farSpot - Game1.GridWidth);
+                            }
+                            else
+                            {
+                                Idk2(farSpot - 1, RotationOptions.TwoHundredSeventyDegrees);
                             }
                             RotationOption = RotationOptions.TwoHundredSeventyDegrees;
                         }
@@ -209,17 +227,22 @@ namespace Tetris.TestOfEachPiece
                     case RotationOptions.TwoHundredSeventyDegrees:
                         {
                             var xSpot = CalculateClosestPointOnShape(RotationOptions.NoRotation, Shape);
-                            Idk(xSpot, RotationOptions.NoRotation);
                             if (xSpot < 0)
                             {
                                 GridPosition.X += Math.Abs(xSpot);
                             }
-
+                            else
+                            {
+                                Idk(xSpot + 1, RotationOptions.NoRotation);
+                            }
                             var farSpot = CalculateFurthestPointOnShape(RotationOptions.NoRotation, Shape);
-                            Idk2(farSpot, RotationOptions.NoRotation);
                             if (farSpot > Game1.GridWidth)
                             {
                                 GridPosition.X -= (farSpot - Game1.GridWidth);
+                            }
+                            else
+                            {
+                                Idk2(farSpot - 1, RotationOptions.NoRotation);
                             }
                             RotationOption = RotationOptions.NoRotation;
                         }

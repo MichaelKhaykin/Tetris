@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 using Tetris.TestOfEachPiece;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace Tetris
 {
@@ -19,25 +18,26 @@ namespace Tetris
 
         List<BaseTetromino> boomers = new List<BaseTetromino>();
 
-        BaseTetromino current; 
+        BaseTetromino current;
 
+        public bool isPaused = false;
         public GameScreen(ContentManager content, GraphicsDeviceManager graphics)
             : base(content, graphics)
         {
             offSet = new Vector2((Graphics.GraphicsDevice.Viewport.Width - grid.GetLength(1) * Game1.GridCellSize) / 2, 0);
 
-            for(int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 nextTiles.Add(GeneratePiece(i));
             }
 
             current = GeneratePiece(0);
             current.GridPosition = new Point(4, -3);
-        }   
+        }
 
         private BaseTetromino GeneratePiece(int i)
         {
-            var pieceTypeToCreate = (PieceTypes)Game1.Random.Next(0, 6);
+            var pieceTypeToCreate = (PieceTypes)Game1.Random.Next(0, 7);
             var startPoint = new Point(-4, i * 4);
             BaseTetromino newPiece = null;
             switch (pieceTypeToCreate)
@@ -75,6 +75,30 @@ namespace Tetris
         }
         public override void Update(GameTime gameTime)
         {
+            if(InputManager.KeyboardState.IsKeyDown(Keys.P))
+            {
+                isPaused = !isPaused;
+                string content = "";
+                for(int i = 0; i < grid.GetLength(0); i++)
+                {
+                    for(int j = 0; j < grid.GetLength(1); j++)
+                    {
+                        if(grid[i, j] == true)
+                        {
+                            content += "1, ";
+                        }
+                        else
+                        {
+                            content += "0, ";
+                        }
+                    }
+                    content += '\n';
+                }
+                File.WriteAllText("gridRepresentation.txt", content);
+            }
+
+            if (isPaused == true) return;
+
             current.Update(gameTime);
 
            // for(int i = 0; i < )

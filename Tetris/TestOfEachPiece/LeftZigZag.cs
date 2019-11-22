@@ -63,9 +63,9 @@ namespace Tetris.TestOfEachPiece
                 },
                 [RotationOptions.TwoHundredSeventyDegrees] = new int[,]
                 {
-                    { 0, 1, 0 },
+                    { 1, 0, 0 },
                     { 1, 1, 0 },
-                    { 1, 0, 0 }
+                    { 0, 1, 0 }
                 }
             };
         }
