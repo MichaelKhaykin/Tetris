@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Tetris
 {
@@ -18,6 +20,8 @@ namespace Tetris
         public static Random Random = new Random();
 
         public static Texture2D Pixel;
+
+        public static List<Color> AllColors = new List<Color>();
 
         public Game1()
         {
@@ -44,6 +48,16 @@ namespace Tetris
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             ScreenManager.CurrentScreen = ScreenStates.Game;
+
+            var infos = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
+            int count = -1;
+            foreach(var info in infos)
+            {
+                count++;
+                if (count < 1) continue;
+                AllColors.Add((Color)info.GetValue(null));
+            }
+
 
             Pixel = new Texture2D(GraphicsDevice, 1, 1);
             Pixel.SetData(new[] { Color.White });

@@ -40,34 +40,35 @@ namespace Tetris
             var pieceTypeToCreate = (PieceTypes)Game1.Random.Next(0, 7);
             var startPoint = new Point(-4, i * 4);
             BaseTetromino newPiece = null;
+
             switch (pieceTypeToCreate)
             {
                 case PieceTypes.LL:
-                    newPiece = new LeftL(Content.Load<Texture2D>("leftLPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    newPiece = new LeftL(Content.Load<Texture2D>("leftLPiece"), startPoint, Color.Orange, Vector2.One, RotationOptions.NoRotation);
                     break;
 
                 case PieceTypes.RL:
-                    newPiece = new RightL(Content.Load<Texture2D>("rightLPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    newPiece = new RightL(Content.Load<Texture2D>("rightLPiece"), startPoint, Color.Blue, Vector2.One, RotationOptions.NoRotation);
                     break;
 
                 case PieceTypes.T:
-                    newPiece = new TPiece(Content.Load<Texture2D>("smallTPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    newPiece = new TPiece(Content.Load<Texture2D>("smallTPiece"), startPoint, Color.Purple, Vector2.One, RotationOptions.NoRotation);
                     break;
 
                 case PieceTypes.LZZ:
-                    newPiece = new LeftZigZag(Content.Load<Texture2D>("leftZigZagPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    newPiece = new LeftZigZag(Content.Load<Texture2D>("leftZigZagPiece"), startPoint, Color.Green, Vector2.One, RotationOptions.NoRotation);
                     break;
 
                 case PieceTypes.RZZ:
-                    newPiece = new RightZigZag(Content.Load<Texture2D>("rightZigZagPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    newPiece = new RightZigZag(Content.Load<Texture2D>("rightZigZagPiece"), startPoint, Color.Red, Vector2.One, RotationOptions.NoRotation);
                     break;
 
                 case PieceTypes.Square:
-                    newPiece = new Square(Content.Load<Texture2D>("squarePiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    newPiece = new Square(Content.Load<Texture2D>("squarePiece"), startPoint, Color.Yellow, Vector2.One, RotationOptions.NoRotation);
                     break;
 
                 case PieceTypes.Straight:
-                    newPiece = new StraightPiece(Content.Load<Texture2D>("straightPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
+                    newPiece = new StraightPiece(Content.Load<Texture2D>("straightPiece"), startPoint, Color.Blue, Vector2.One, RotationOptions.NoRotation);
                     break;
             }
 
