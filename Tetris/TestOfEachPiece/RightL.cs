@@ -38,6 +38,8 @@ namespace Tetris.TestOfEachPiece
         public RightL(Texture2D texture, Point gridPosition, Color color, Vector2 scale, RotationOptions rotationOption) 
             : base(texture, gridPosition, color, scale, rotationOption)
         {
+            PieceType = PieceTypes.RL;
+
             Shape = new Dictionary<RotationOptions, int[,]>()
             {
                 [RotationOptions.NoRotation] = new int[,]

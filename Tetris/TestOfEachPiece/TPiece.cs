@@ -41,6 +41,8 @@ namespace Tetris.TestOfEachPiece
         public TPiece(Texture2D texture, Point gridPosition, Color color, Vector2 scale, RotationOptions rotationOption)
             : base(texture, gridPosition, color, scale, rotationOption)
         {
+            PieceType = PieceTypes.T;
+
             Shape = new Dictionary<RotationOptions, int[,]>()
             {
                 [RotationOptions.NoRotation] = new int[,]

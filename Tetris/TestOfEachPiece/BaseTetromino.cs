@@ -22,6 +22,8 @@ namespace Tetris.TestOfEachPiece
         public Dictionary<RotationOptions, int[,]> Shape { get; set; }
         public bool IsEnabled { get; set; } = true;
 
+        public PieceTypes PieceType { get; set; }
+
         public BaseTetromino(Texture2D texture, Point gridPosition, Color color, Vector2 scale, RotationOptions rotationOption)
             : base(texture, Vector2.Zero, color, scale, (int)rotationOption, SpriteEffects.None, 0)
         {
@@ -41,7 +43,7 @@ namespace Tetris.TestOfEachPiece
             return GridPosition.X + x;
         }
 
-        private List<int>[] GetMarkedSpots(RotationOptions rotationOption, Dictionary<RotationOptions, int[,]> shape)
+        public List<int>[] GetMarkedSpots(RotationOptions rotationOption, Dictionary<RotationOptions, int[,]> shape)
         {
             var array = shape[rotationOption];
             List<int> ySpots = new List<int>();
@@ -94,6 +96,7 @@ namespace Tetris.TestOfEachPiece
                 for (int i = 0; i < spots[0].Count; i++)
                 {
                     if (spots[1][i] + GridPosition.Y + 1 >= GameScreen.grid.GetLength(0)) continue;
+                    
 
                     if (GameScreen.grid[spots[1][i] + GridPosition.Y + 1, spots[0][i] + GridPosition.X] == true)
                     {

@@ -41,6 +41,8 @@ namespace Tetris.TestOfEachPiece
         public LeftZigZag(Texture2D texture, Point gridPosition, Color color, Vector2 scale, RotationOptions rotationOption) 
             : base(texture, gridPosition, color, scale, rotationOption)
         {
+            PieceType = PieceTypes.LZZ;
+
             Shape = new Dictionary<RotationOptions, int[,]>()
             {
                 [RotationOptions.NoRotation] = new int[,]

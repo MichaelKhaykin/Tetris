@@ -41,6 +41,8 @@ namespace Tetris.TestOfEachPiece
         public RightZigZag(Texture2D texture, Point gridPosition, Color color, Vector2 scale, RotationOptions rotationOption) 
             : base(texture, gridPosition, color, scale, rotationOption)
         {
+            PieceType = PieceTypes.RZZ;
+
             Shape = new Dictionary<RotationOptions, int[,]>()
             {
                 [RotationOptions.NoRotation] = new int[,]

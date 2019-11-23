@@ -22,6 +22,8 @@ namespace Tetris.TestOfEachPiece
         }
         public Square(Texture2D texture, Point gridPosition, Color color, Vector2 scale, RotationOptions rotationOption) : base(texture, gridPosition, color, scale, rotationOption)
         {
+            PieceType = PieceTypes.Square;
+
             Shape = new Dictionary<RotationOptions, int[,]>()
             {
                 [RotationOption = RotationOptions.NoRotation] = new int[,]
