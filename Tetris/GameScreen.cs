@@ -135,7 +135,31 @@ namespace Tetris
                     holdPiece.GridPosition = new Point(11, 0);
                 }
             }
+            if (InputManager.KeyboardState.IsKeyDown(Keys.Space) && InputManager.OldKeyboardState.IsKeyUp(Keys.Space))
+            {
+                var markedSpots = current.GetMarkedSpots(current.RotationOption, current.Shape);
+                
+                var markedXs = markedSpots[0];
+                
+                var height = markedSpots[1].OrderByDescending(x => x).First();
+       
+                int savedYPosition = grid.GetLength(0) - 1 - height;
+                
+                for (int i = 0; i < grid.GetLength(0); i++)
+                {
+                    for (int h = 0; h < markedXs.Count; h++)
+                    {
+                        if (grid[i, markedXs[h] + current.GridPosition.X] == true)
+                        {
+                            savedYPosition = i - 1 - height;
+                            i = grid.GetLength(0);
+                            break;
+                        }
+                    }
+                }
 
+                current.GridPosition.Y = savedYPosition;
+            }
 
 
             current.Update(gameTime);
@@ -208,7 +232,7 @@ namespace Tetris
                         count++;
                     }
                 }
-                if(count >= 10)
+                if (count >= 10)
                 {
                     isRowFilled = true;
                     rowFillY = y;
