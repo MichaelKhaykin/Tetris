@@ -24,6 +24,11 @@ namespace Tetris
         BaseTetromino holdPiece = null;
 
         public bool isPaused = false;
+
+        int highestRowAffected = 0;
+        int amountOfRowsToDrop = 0;
+
+        int amountOfFades = 0;
         public GameScreen(ContentManager content, GraphicsDeviceManager graphics)
             : base(content, graphics)
         {
@@ -220,8 +225,7 @@ namespace Tetris
             }
 
 
-            bool isRowFilled = false;
-            int rowFillY = 0;
+            List<int> rowFilledYs = new List<int>();
             for (int y = 0; y < grid.GetLength(0); y++)
             {
                 int count = 0;
@@ -234,23 +238,57 @@ namespace Tetris
                 }
                 if (count >= 10)
                 {
-                    isRowFilled = true;
-                    rowFillY = y;
-
-                    //exit outer forloop
-                    y = grid.GetLength(0);
+                    rowFilledYs.Add(y);
                 }
             }
 
-            if (isRowFilled)
+            if (rowFilledYs.Count > 0 && amountOfFades == 0)
             {
-                for (int i = 0; i < boomers.Count; i++)
+                highestRowAffected = rowFilledYs.OrderByDescending(x => x).First();
+                amountOfRowsToDrop = rowFilledYs.Count;
+
+                for(int i = 0; i < rowFilledYs.Count; i++)
                 {
-                    if (boomers[i].GridPosition.Y <= rowFillY)
+                    for(int j = 0; j < boomers.Count; j++)
                     {
-                        boomers[i].GridPosition.Y += 20 - rowFillY;
+                        if(boomers[j].GridPosition.Y == rowFilledYs[i])
+                        {
+                            boomers[j].isFadingOut = true;
+                            amountOfFades++;
+                        }
                     }
                 }
+            }
+
+            int doneCount = 0;
+            for(int i = 0; i < boomers.Count; i++)
+            {
+                boomers[i].Update(gameTime);
+                if(boomers[i].TravelPercentage >= 1f)
+                {
+                    doneCount++;
+                }
+            }
+
+            if (doneCount == amountOfFades && amountOfFades != 0)
+            {
+                //reset amountOfFades to 0
+                for (int i = 0; i < boomers.Count; i++)
+                {
+                    if (boomers[i].isFadingOut == true)
+                    {
+                        boomers.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+
+                    if (boomers[i].GridPosition.Y <= highestRowAffected)
+                    {
+                        boomers[i].GridPosition.Y += amountOfRowsToDrop;
+                    }
+                }
+
+                amountOfFades = 0;
 
                 for (int w = 0; w < grid.GetLength(0); w++)
                 {

@@ -14,6 +14,11 @@ namespace Tetris
         private Point gridPosition;
         public ref Point GridPosition => ref gridPosition;
 
+        public bool isFadingOut { get; set; } = false;
+
+        public Color OgColor { get; set; }
+
+        public float TravelPercentage { get; set; } = 0;
         public override Vector2 Position
         {
             get
@@ -22,9 +27,19 @@ namespace Tetris
             }
         }
         public Cell(Texture2D texture, Point gridPosition, Color color, Vector2 scale, float rotation = 0, SpriteEffects effects = SpriteEffects.None, float layerDepth = 0)
-            : base(texture, new Vector2(0, 0), color, scale, rotation, effects, layerDepth)
+            : base(texture, Vector2.Zero, color, scale, rotation, effects, layerDepth)
         {
             GridPosition = gridPosition;
+            OgColor = color;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if(isFadingOut)
+            {
+                Color = Color.Lerp(OgColor, Color.Transparent, TravelPercentage);
+                TravelPercentage += 0.05f;
+            }
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Tetris
             Texture = texture;
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
 
         }
