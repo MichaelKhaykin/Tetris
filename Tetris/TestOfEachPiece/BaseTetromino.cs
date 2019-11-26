@@ -21,9 +21,13 @@ namespace Tetris.TestOfEachPiece
         public override float Rotation { get => (int)RotationOption; }
         public Dictionary<RotationOptions, int[,]> Shape { get; set; }
         public bool IsEnabled { get; set; } = true;
-
         public PieceTypes PieceType { get; set; }
 
+        private TimeSpan timeToMoveBeforeBeingCompletelyDisabled = TimeSpan.FromMilliseconds(500);
+
+        private TimeSpan elapsedTimeBeforeBeingCompletelyDisabled = TimeSpan.Zero;
+
+        private bool shouldEnableDisableTimer = false;
         public BaseTetromino(Texture2D texture, Point gridPosition, Color color, Vector2 scale, RotationOptions rotationOption)
             : base(texture, Vector2.Zero, color, scale, (int)rotationOption, SpriteEffects.None, 0)
         {
@@ -86,32 +90,33 @@ namespace Tetris.TestOfEachPiece
         {
             if (IsEnabled == false) return;
 
-            var spots = GetMarkedSpots(RotationOption, Shape);
-
-            var ySpots = spots[1];
-            var y = ySpots.OrderByDescending(w => w).First() + GridPosition.Y + 1;
-
-            if (GridPosition.Y >= -1)
+            if (shouldEnableDisableTimer)
             {
-                for (int i = 0; i < spots[0].Count; i++)
-                {
-                    if (spots[1][i] + GridPosition.Y + 1 >= GameScreen.grid.GetLength(0)) continue;
-                    
+                elapsedTimeBeforeBeingCompletelyDisabled += gameTime.ElapsedGameTime;
 
-                    if (GameScreen.grid[spots[1][i] + GridPosition.Y + 1, spots[0][i] + GridPosition.X] == true)
+                if (elapsedTimeBeforeBeingCompletelyDisabled >= timeToMoveBeforeBeingCompletelyDisabled)
+                {
+                    //recheck to make sure newposition is still valid for disabling the piece
+                    if (ShouldDisablePiece())
                     {
                         FillSpot();
                     }
-                    
+                    else
+                    {
+                        shouldEnableDisableTimer = false;
+                    }
                 }
             }
-                
-            if (y >= Game1.GridHeight) 
+
+            if (ShouldDisablePiece() && !shouldEnableDisableTimer)
             {
-                FillSpot();
+                shouldEnableDisableTimer = true;
             }
 
-            if (InputManager.KeyboardState.IsKeyDown(Keys.Down) && InputManager.OldKeyboardState.IsKeyUp(Keys.Down))
+            var spots = GetMarkedSpots(RotationOption, Shape);
+
+            if (InputManager.KeyboardState.IsKeyDown(Keys.Down) && InputManager.OldKeyboardState.IsKeyUp(Keys.Down)
+                && !shouldEnableDisableTimer)
             {
                 GridPosition.Y += 1;
                 elapsedMoveDownTime = TimeSpan.Zero;
@@ -156,6 +161,7 @@ namespace Tetris.TestOfEachPiece
             }
             if (InputManager.KeyboardState.IsKeyDown(Keys.Up) && InputManager.OldKeyboardState.IsKeyUp(Keys.Up))
             {
+                var ogGridPosition = GridPosition;
                 switch (RotationOption)
                 {
                     case RotationOptions.NoRotation:
@@ -178,7 +184,14 @@ namespace Tetris.TestOfEachPiece
                             {
                                 Idk2(farSpot - 1, RotationOptions.NintyDegrees);
                             }
-                            RotationOption = RotationOptions.NintyDegrees;
+                            if(WillPieceFit(RotationOptions.NintyDegrees, Shape))
+                            {
+                                RotationOption = RotationOptions.NintyDegrees;
+                            }
+                            else
+                            {
+                                GridPosition = ogGridPosition;
+                            }
                         }
                         break;
                     case RotationOptions.NintyDegrees:
@@ -201,7 +214,15 @@ namespace Tetris.TestOfEachPiece
                             {
                                 Idk2(farSpot - 1, RotationOptions.HundredEightyDegrees);
                             }
-                            RotationOption = RotationOptions.HundredEightyDegrees;
+
+                            if (WillPieceFit(RotationOptions.HundredEightyDegrees, Shape))
+                            {
+                                RotationOption = RotationOptions.HundredEightyDegrees;
+                            }
+                            else
+                            {
+                                GridPosition = ogGridPosition;
+                            }
                         }
                         break;
                     case RotationOptions.HundredEightyDegrees:
@@ -224,7 +245,15 @@ namespace Tetris.TestOfEachPiece
                             {
                                 Idk2(farSpot - 1, RotationOptions.TwoHundredSeventyDegrees);
                             }
-                            RotationOption = RotationOptions.TwoHundredSeventyDegrees;
+
+                            if (WillPieceFit(RotationOptions.TwoHundredSeventyDegrees, Shape))
+                            {
+                                RotationOption = RotationOptions.TwoHundredSeventyDegrees;
+                            }
+                            else
+                            {
+                                GridPosition = ogGridPosition;
+                            }
                         }
                         break;
                     case RotationOptions.TwoHundredSeventyDegrees:
@@ -247,14 +276,23 @@ namespace Tetris.TestOfEachPiece
                             {
                                 Idk2(farSpot - 1, RotationOptions.NoRotation);
                             }
-                            RotationOption = RotationOptions.NoRotation;
+
+                            if (WillPieceFit(RotationOptions.NoRotation, Shape))
+                            {
+                                RotationOption = RotationOptions.NoRotation;
+                            }
+                            else
+                            {
+                                //change everything back 
+                                GridPosition = ogGridPosition;
+                            }
                         }
                         break;
                 }
             }
 
             elapsedMoveDownTime += gameTime.ElapsedGameTime;
-            if (elapsedMoveDownTime >= moveDownTimer)
+            if (elapsedMoveDownTime >= moveDownTimer && !shouldEnableDisableTimer)
             {
                 GridPosition.Y += 1;
                 elapsedMoveDownTime = TimeSpan.Zero;
@@ -275,6 +313,12 @@ namespace Tetris.TestOfEachPiece
                         ySpot = i;
                     }
                 }
+            }
+
+            if (ySpot + GridPosition.Y >= GameScreen.grid.GetLength(0))
+            {
+                var offsetAmount = GameScreen.grid.GetLength(0) - (ySpot + GridPosition.Y) + 1;
+                GridPosition.Y -= offsetAmount;
             }
 
             if (GameScreen.grid[ySpot + GridPosition.Y, xSpot] == true)
@@ -305,6 +349,12 @@ namespace Tetris.TestOfEachPiece
                 }
             }
 
+            if (farYSpot + GridPosition.Y >= GameScreen.grid.GetLength(0))
+            {
+                var offsetAmount = GameScreen.grid.GetLength(0) - (farYSpot + GridPosition.Y) + 1;
+                GridPosition.Y -= offsetAmount;
+            }
+
             if (GameScreen.grid[farYSpot + GridPosition.Y, farSpot] == true)
             {
                 if (GameScreen.grid[farYSpot + GridPosition.Y, farSpot - 1] == true)
@@ -316,6 +366,43 @@ namespace Tetris.TestOfEachPiece
                     GridPosition.X -= 1;
                 }
             }
+        }
+
+        public bool ShouldDisablePiece()
+        {
+            var spots = GetMarkedSpots(RotationOption, Shape);
+
+            var ySpots = spots[1];
+            var y = ySpots.OrderByDescending(w => w).First() + GridPosition.Y + 1;
+
+            if (GridPosition.Y >= -1)
+            {
+                for (int i = 0; i < spots[0].Count; i++)
+                {
+                    if (spots[1][i] + GridPosition.Y + 1 >= GameScreen.grid.GetLength(0)) continue;
+
+                    if (GameScreen.grid[spots[1][i] + GridPosition.Y + 1, spots[0][i] + GridPosition.X] == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return y >= Game1.GridHeight;
+        }
+
+        public bool WillPieceFit(RotationOptions rotationOption, Dictionary<RotationOptions, int[,]> shape)
+        {
+            var spots = GetMarkedSpots(rotationOption, shape);
+            for(int i = 0; i < spots[0].Count; i++)
+            {
+                if(GameScreen.grid[spots[1][i] + GridPosition.Y, spots[0][i] + GridPosition.X] == true)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
