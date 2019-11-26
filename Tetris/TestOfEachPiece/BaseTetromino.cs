@@ -351,7 +351,8 @@ namespace Tetris.TestOfEachPiece
 
             if (farYSpot + GridPosition.Y >= GameScreen.grid.GetLength(0))
             {
-                var offsetAmount = GameScreen.grid.GetLength(0) - (farYSpot + GridPosition.Y) + 1;
+                var offsetAmount = GameScreen.grid.GetLength(0) - (farYSpot
+                    + GridPosition.Y) + 1;
                 GridPosition.Y -= offsetAmount;
             }
 
