@@ -142,28 +142,35 @@ namespace Tetris
             }
             if (InputManager.KeyboardState.IsKeyDown(Keys.Space) && InputManager.OldKeyboardState.IsKeyUp(Keys.Space))
             {
-                var markedSpots = current.GetMarkedSpots(current.RotationOption, current.Shape);
-                
-                var markedXs = markedSpots[0];
-                
-                var height = markedSpots[1].OrderByDescending(x => x).First();
-       
-                int savedYPosition = grid.GetLength(0) - 1 - height;
-                
-                for (int i = 0; i < grid.GetLength(0); i++)
+                var currentMarkedSpots = current.GetMarkedSpots(current.RotationOption, current.Shape);
+                var lowestPoint = current.GridPosition.Y + current.Shape[current.RotationOption].GetLength(0);
+
+                bool didFindLowestGround = false;
+
+                for(int i = 0; i < grid.GetLength(0) - lowestPoint; i++)
                 {
-                    for (int h = 0; h < markedXs.Count; h++)
+                    for(int j = 0; j < currentMarkedSpots[0].Count; j++)
                     {
-                        if (grid[i, markedXs[h] + current.GridPosition.X] == true)
+                        if (current.GridPosition.Y < 0) break;
+
+                        if(grid[current.GridPosition.Y + i + currentMarkedSpots[1][j], current.GridPosition.X + currentMarkedSpots[0][j]] == true)
                         {
-                            savedYPosition = i - 1 - height;
-                            i = grid.GetLength(0);
+                            didFindLowestGround = true;
                             break;
                         }
                     }
+
+                    if (didFindLowestGround)
+                    {
+                        current.GridPosition.Y = i;
+                        break;
+                    }  
                 }
 
-                current.GridPosition.Y = savedYPosition;
+                if (!didFindLowestGround)
+                {
+                    current.GridPosition.Y = (grid.GetLength(0) - 1) - current.PieceHeight;
+                }
             }
 
 

@@ -28,6 +28,26 @@ namespace Tetris.TestOfEachPiece
         private TimeSpan elapsedTimeBeforeBeingCompletelyDisabled = TimeSpan.Zero;
 
         private bool shouldEnableDisableTimer = false;
+
+        public int PieceHeight 
+        {
+            get 
+            {
+                int lowest1 = 0;
+                for(int i = 0; i < Shape[RotationOption].GetLength(0); i++)
+                {
+                    for(int j = 0; j < Shape[RotationOption].GetLength(1); j++)
+                    {
+                        if(Shape[RotationOption][i, j] == 1)
+                        {
+                            lowest1 = i;
+                        }
+                    }
+                }
+
+                return lowest1;
+            }
+        }
         public BaseTetromino(Texture2D texture, Point gridPosition, Color color, Vector2 scale, RotationOptions rotationOption)
             : base(texture, Vector2.Zero, color, scale, (int)rotationOption, SpriteEffects.None, 0)
         {
@@ -314,7 +334,7 @@ namespace Tetris.TestOfEachPiece
                     }
                 }
             }
-
+            
             if (ySpot + GridPosition.Y >= GameScreen.grid.GetLength(0))
             {
                 var offsetAmount = GameScreen.grid.GetLength(0) - (ySpot + GridPosition.Y) + 1;
@@ -397,6 +417,7 @@ namespace Tetris.TestOfEachPiece
             var spots = GetMarkedSpots(rotationOption, shape);
             for(int i = 0; i < spots[0].Count; i++)
             {
+                if (GridPosition.Y < 0) continue;
                 if(GameScreen.grid[spots[1][i] + GridPosition.Y, spots[0][i] + GridPosition.X] == true)
                 {
                     return false;
