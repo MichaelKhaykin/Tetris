@@ -146,8 +146,9 @@ namespace Tetris
                 var lowestPoint = current.GridPosition.Y + current.Shape[current.RotationOption].GetLength(0);
 
                 bool didFindLowestGround = false;
-
-                for(int i = 0; i < grid.GetLength(0) - lowestPoint; i++)
+                var height = 0;
+                
+                for(int i = 0; i <= grid.GetLength(0) - lowestPoint; i++)
                 {
                     for(int j = 0; j < currentMarkedSpots[0].Count; j++)
                     {
@@ -156,13 +157,14 @@ namespace Tetris
                         if(grid[current.GridPosition.Y + i + currentMarkedSpots[1][j], current.GridPosition.X + currentMarkedSpots[0][j]] == true)
                         {
                             didFindLowestGround = true;
+                            height = j;
                             break;
                         }
                     }
 
                     if (didFindLowestGround)
                     {
-                        current.GridPosition.Y = i;
+                        current.GridPosition.Y += i + currentMarkedSpots[1][height] - current.Shape[current.RotationOption].GetLength(0);
                         break;
                     }  
                 }
