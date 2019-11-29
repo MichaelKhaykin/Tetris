@@ -110,6 +110,8 @@ namespace Tetris.TestOfEachPiece
         {
             if (IsEnabled == false) return;
 
+            
+
             if (shouldEnableDisableTimer)
             {
                 elapsedTimeBeforeBeingCompletelyDisabled += gameTime.ElapsedGameTime;
@@ -138,8 +140,11 @@ namespace Tetris.TestOfEachPiece
             if ((InputManager.KeyboardState.IsKeyDown(Keys.Down) && InputManager.OldKeyboardState.IsKeyUp(Keys.Down))
                 || (InputManager.KeyboardState.IsKeyDown(Keys.S) && InputManager.OldKeyboardState.IsKeyUp(Keys.S)) && !shouldEnableDisableTimer)
             {
-                GridPosition.Y += 1;
-                elapsedMoveDownTime = TimeSpan.Zero;
+                if (!ShouldDisablePiece())
+                {
+                    GridPosition.Y += 1;
+                    elapsedMoveDownTime = TimeSpan.Zero;
+                }
             }
             if ((InputManager.KeyboardState.IsKeyDown(Keys.Left) && InputManager.OldKeyboardState.IsKeyUp(Keys.Left))
                 || (InputManager.KeyboardState.IsKeyDown(Keys.A) && InputManager.OldKeyboardState.IsKeyUp(Keys.A)))
@@ -402,7 +407,7 @@ namespace Tetris.TestOfEachPiece
             {
                 for (int i = 0; i < spots[0].Count; i++)
                 {
-                    if (spots[1][i] + GridPosition.Y + 1 >= GameScreen.grid.GetLength(0)) continue;
+                    if (spots[1][i] + GridPosition.Y + 1 >= GameScreen.grid.GetLength(0))   continue;
 
                     if (GameScreen.grid[spots[1][i] + GridPosition.Y + 1, spots[0][i] + GridPosition.X] == true)
                     {

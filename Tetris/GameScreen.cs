@@ -140,7 +140,7 @@ namespace Tetris
                     var temp = current;
 
                     current = holdPiece;
-                    current.GridPosition = temp.GridPosition;
+                    current.GridPosition = new Point(MathHelper.Clamp(temp.GridPosition.X, 0, grid.GetLength(1) - current.Shape[current.RotationOption].GetLength(1)), temp.GridPosition.Y);
 
                     holdPiece = temp;
                     holdPiece.GridPosition = new Point(11, 0);
