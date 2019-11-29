@@ -37,12 +37,7 @@ namespace Tetris
 
             for (int i = 0; i < 3; i++)
             {
-                var tile = GeneratePiece(i);
-                while(tile.PieceType != PieceTypes.Straight)
-                {
-                    tile = GeneratePiece(i);
-                }
-                nextTiles.Add(tile);
+                nextTiles.Add(GeneratePiece(i));
             }
 
             current = GeneratePiece(0);
@@ -120,8 +115,8 @@ namespace Tetris
                 if (holdPiece == null)
                 {
                     holdPiece = current;
+                    holdPiece.shouldProject = false;
                     holdPiece.GridPosition = new Point(11, 0);
-
 
                     current = nextTiles[0];
                     current.GridPosition = new Point(4, -3);
@@ -141,47 +136,25 @@ namespace Tetris
 
                     current = holdPiece;
                     current.GridPosition = new Point(MathHelper.Clamp(temp.GridPosition.X, 0, grid.GetLength(1) - current.Shape[current.RotationOption].GetLength(1)), temp.GridPosition.Y);
+                    current.shouldProject = false;
 
                     holdPiece = temp;
                     holdPiece.GridPosition = new Point(11, 0);
+                    holdPiece.shouldProject = false;
                 }
             }
+            
+            if(current.GridPosition.Y > 0 && current.GridPosition.X > 0 && current.GridPosition.X < grid.GetLength(1))
+            {
+                current.shouldProject = true;
+            }
+
             if (InputManager.KeyboardState.IsKeyDown(Keys.Space) && InputManager.OldKeyboardState.IsKeyUp(Keys.Space)
                 && current.GridPosition.Y > 0)
             {
                 current.elapsedMoveDownTime = TimeSpan.Zero;
 
-                var currentMarkedSpots = current.GetMarkedSpots(current.RotationOption, current.Shape);
-                var lowestPoint = current.GridPosition.Y + current.PieceHeight;//current.Shape[current.RotationOption].GetLength(0);
-
-                bool didFindLowestGround = false;
-                var height = 0;
-                
-                for(int i = 0; i < grid.GetLength(0) - lowestPoint; i++)
-                {
-                    for(int j = 0; j < currentMarkedSpots[0].Count; j++)
-                    {
-                        if (current.GridPosition.Y < 0) break;
-
-                        if(grid[current.GridPosition.Y + i + currentMarkedSpots[1][j], current.GridPosition.X + currentMarkedSpots[0][j]] == true)
-                        {
-                            didFindLowestGround = true;
-                            height = j;
-                            break;
-                        }
-                    }
-
-                    if (didFindLowestGround)
-                    {
-                        current.GridPosition.Y += i - 1;
-                        break;
-                    }  
-                }
-
-                if (!didFindLowestGround)
-                {
-                    current.GridPosition.Y = (grid.GetLength(0) - 1) - current.PieceHeight;
-                }
+                current.GridPosition.Y = current.LowestGridPosition();
             }
 
 
@@ -230,7 +203,7 @@ namespace Tetris
                 }
 
                 current = nextTiles[0];
-                current.GridPosition = new Point(4, -3);
+               current.GridPosition = new Point(4, -3);
 
                 nextTiles.RemoveAt(0);
 
@@ -327,9 +300,6 @@ namespace Tetris
 
             base.Update(gameTime);
         }
-
-
-
         public override void Draw(SpriteBatch spriteBatch)
         {
 

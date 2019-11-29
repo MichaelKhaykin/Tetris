@@ -29,16 +29,18 @@ namespace Tetris.TestOfEachPiece
 
         private bool shouldEnableDisableTimer = false;
 
-        public int PieceHeight 
+        public bool shouldProject = false;
+
+        public int PieceHeight
         {
-            get 
+            get
             {
                 int lowest1 = 0;
-                for(int i = 0; i < Shape[RotationOption].GetLength(0); i++)
+                for (int i = 0; i < Shape[RotationOption].GetLength(0); i++)
                 {
-                    for(int j = 0; j < Shape[RotationOption].GetLength(1); j++)
+                    for (int j = 0; j < Shape[RotationOption].GetLength(1); j++)
                     {
-                        if(Shape[RotationOption][i, j] == 1)
+                        if (Shape[RotationOption][i, j] == 1)
                         {
                             lowest1 = i;
                         }
@@ -110,7 +112,7 @@ namespace Tetris.TestOfEachPiece
         {
             if (IsEnabled == false) return;
 
-            
+
 
             if (shouldEnableDisableTimer)
             {
@@ -211,7 +213,7 @@ namespace Tetris.TestOfEachPiece
                             {
                                 Idk2(farSpot - 1, RotationOptions.NintyDegrees);
                             }
-                            if(WillPieceFit(RotationOptions.NintyDegrees, Shape))
+                            if (WillPieceFit(RotationOptions.NintyDegrees, Shape))
                             {
                                 RotationOption = RotationOptions.NintyDegrees;
                             }
@@ -341,7 +343,7 @@ namespace Tetris.TestOfEachPiece
                     }
                 }
             }
-            
+
             if (ySpot + GridPosition.Y >= GameScreen.grid.GetLength(0))
             {
                 var offsetAmount = GameScreen.grid.GetLength(0) - (ySpot + GridPosition.Y) + 1;
@@ -407,7 +409,7 @@ namespace Tetris.TestOfEachPiece
             {
                 for (int i = 0; i < spots[0].Count; i++)
                 {
-                    if (spots[1][i] + GridPosition.Y + 1 >= GameScreen.grid.GetLength(0))   continue;
+                    if (spots[1][i] + GridPosition.Y + 1 >= GameScreen.grid.GetLength(0)) continue;
 
                     if (GameScreen.grid[spots[1][i] + GridPosition.Y + 1, spots[0][i] + GridPosition.X] == true)
                     {
@@ -422,16 +424,66 @@ namespace Tetris.TestOfEachPiece
         public bool WillPieceFit(RotationOptions rotationOption, Dictionary<RotationOptions, int[,]> shape)
         {
             var spots = GetMarkedSpots(rotationOption, shape);
-            for(int i = 0; i < spots[0].Count; i++)
+            for (int i = 0; i < spots[0].Count; i++)
             {
                 if (GridPosition.Y < 0) continue;
-                if(GameScreen.grid[spots[1][i] + GridPosition.Y, spots[0][i] + GridPosition.X] == true)
+                if (GameScreen.grid[spots[1][i] + GridPosition.Y, spots[0][i] + GridPosition.X] == true)
                 {
                     return false;
                 }
             }
 
             return true;
+        }
+
+        public int LowestGridPosition()
+        {
+            var currentMarkedSpots = GetMarkedSpots(RotationOption, Shape);
+            var lowestPoint = GridPosition.Y + PieceHeight;
+
+            bool didFindLowestGround = false;
+
+            for (int i = 0; i < GameScreen.grid.GetLength(0) - lowestPoint; i++)
+            {
+                for (int j = 0; j < currentMarkedSpots[0].Count; j++)
+                {
+                    if (GridPosition.Y < 0) break;
+
+                    if (GameScreen.grid[GridPosition.Y + i + currentMarkedSpots[1][j], GridPosition.X + currentMarkedSpots[0][j]] == true)
+                    {
+                        didFindLowestGround = true;
+                        break;
+                    }
+                }
+
+                if (didFindLowestGround)
+                {
+                    return GridPosition.Y + i - 1;
+                }
+            }
+
+            if (!didFindLowestGround)
+            {
+                return (GameScreen.grid.GetLength(0) - 1) - PieceHeight;
+            }
+
+            //oof it broke
+            return -100;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+
+            if (!shouldProject) return;
+
+            var oldGridPosition = GridPosition;
+            GridPosition.Y = LowestGridPosition();
+            var newPosition = Position;
+            GridPosition = oldGridPosition;
+
+            spriteBatch.Draw(Texture, newPosition, null, Color * 0.3f, MathHelper.ToRadians(Rotation), Origin, Scale, Effects, LayerDepth);
+
         }
     }
 }

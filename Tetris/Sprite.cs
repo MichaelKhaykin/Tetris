@@ -32,7 +32,7 @@ namespace Tetris
         {
 
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Texture, Position, null, Color, MathHelper.ToRadians(Rotation), Origin, Scale, Effects, LayerDepth);
 
