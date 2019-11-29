@@ -135,13 +135,14 @@ namespace Tetris.TestOfEachPiece
 
             var spots = GetMarkedSpots(RotationOption, Shape);
 
-            if (InputManager.KeyboardState.IsKeyDown(Keys.Down) && InputManager.OldKeyboardState.IsKeyUp(Keys.Down)
-                && !shouldEnableDisableTimer)
+            if ((InputManager.KeyboardState.IsKeyDown(Keys.Down) && InputManager.OldKeyboardState.IsKeyUp(Keys.Down))
+                || (InputManager.KeyboardState.IsKeyDown(Keys.S) && InputManager.OldKeyboardState.IsKeyUp(Keys.S)) && !shouldEnableDisableTimer)
             {
                 GridPosition.Y += 1;
                 elapsedMoveDownTime = TimeSpan.Zero;
             }
-            if (InputManager.KeyboardState.IsKeyDown(Keys.Left) && InputManager.OldKeyboardState.IsKeyUp(Keys.Left))
+            if ((InputManager.KeyboardState.IsKeyDown(Keys.Left) && InputManager.OldKeyboardState.IsKeyUp(Keys.Left))
+                || (InputManager.KeyboardState.IsKeyDown(Keys.A) && InputManager.OldKeyboardState.IsKeyUp(Keys.A)))
             {
                 for (int i = 0; i < spots[0].Count; i++)
                 {
@@ -161,7 +162,8 @@ namespace Tetris.TestOfEachPiece
                 }
 
             }
-            if (InputManager.KeyboardState.IsKeyDown(Keys.Right) && InputManager.OldKeyboardState.IsKeyUp(Keys.Right))
+            if ((InputManager.KeyboardState.IsKeyDown(Keys.Right) && InputManager.OldKeyboardState.IsKeyUp(Keys.Right))
+                || (InputManager.KeyboardState.IsKeyDown(Keys.D) && InputManager.OldKeyboardState.IsKeyUp(Keys.D)))
             {
                 for (int i = 0; i < spots[0].Count; i++)
                 {

@@ -7,6 +7,7 @@ using Tetris.TestOfEachPiece;
 using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
+using System;
 
 namespace Tetris
 {
@@ -36,7 +37,12 @@ namespace Tetris
 
             for (int i = 0; i < 3; i++)
             {
-                nextTiles.Add(GeneratePiece(i));
+                var tile = GeneratePiece(i);
+                while(tile.PieceType != PieceTypes.Straight)
+                {
+                    tile = GeneratePiece(i);
+                }
+                nextTiles.Add(tile);
             }
 
             current = GeneratePiece(0);
@@ -140,15 +146,18 @@ namespace Tetris
                     holdPiece.GridPosition = new Point(11, 0);
                 }
             }
-            if (InputManager.KeyboardState.IsKeyDown(Keys.Space) && InputManager.OldKeyboardState.IsKeyUp(Keys.Space))
+            if (InputManager.KeyboardState.IsKeyDown(Keys.Space) && InputManager.OldKeyboardState.IsKeyUp(Keys.Space)
+                && current.GridPosition.Y > 0)
             {
+                current.elapsedMoveDownTime = TimeSpan.Zero;
+
                 var currentMarkedSpots = current.GetMarkedSpots(current.RotationOption, current.Shape);
-                var lowestPoint = current.GridPosition.Y + current.Shape[current.RotationOption].GetLength(0);
+                var lowestPoint = current.GridPosition.Y + current.PieceHeight;//current.Shape[current.RotationOption].GetLength(0);
 
                 bool didFindLowestGround = false;
                 var height = 0;
                 
-                for(int i = 0; i <= grid.GetLength(0) - lowestPoint; i++)
+                for(int i = 0; i < grid.GetLength(0) - lowestPoint; i++)
                 {
                     for(int j = 0; j < currentMarkedSpots[0].Count; j++)
                     {
@@ -164,7 +173,7 @@ namespace Tetris
 
                     if (didFindLowestGround)
                     {
-                        current.GridPosition.Y += i + currentMarkedSpots[1][height] - current.Shape[current.RotationOption].GetLength(0);
+                        current.GridPosition.Y += i - 1;
                         break;
                     }  
                 }
