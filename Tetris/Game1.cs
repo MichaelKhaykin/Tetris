@@ -80,7 +80,7 @@ namespace Tetris
         }
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.LightBlue);
 
             spriteBatch.Begin();
 

@@ -50,6 +50,7 @@ namespace Tetris
             var startPoint = new Point(-4, i * 4);
             BaseTetromino newPiece = null;
 
+            /*
             switch (pieceTypeToCreate)
             {
                 case PieceTypes.LL:
@@ -80,6 +81,39 @@ namespace Tetris
                     newPiece = new StraightPiece(Content.Load<Texture2D>("StraightPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
                     break;
             }
+            */
+            
+            switch (pieceTypeToCreate)
+            {
+                case PieceTypes.LL:
+                    newPiece = new LeftL(Content.Load<Texture2D>("NewPieces/LPiece"), startPoint, Color.Orange, Vector2.One, RotationOptions.NoRotation);
+                    break;
+
+                case PieceTypes.RL:
+                    newPiece = new RightL(Content.Load<Texture2D>("NewPieces/RPiece"), startPoint, Color.Blue, Vector2.One, RotationOptions.NoRotation);
+                    break;
+
+                case PieceTypes.T:
+                    newPiece = new TPiece(Content.Load<Texture2D>("NewPieces/TPiece"), startPoint, Color.Purple, Vector2.One, RotationOptions.NoRotation);
+                    break;
+
+                case PieceTypes.LZZ:
+                    newPiece = new LeftZigZag(Content.Load<Texture2D>("NewPieces/LeftZigZag"), startPoint, Color.Green, Vector2.One, RotationOptions.NoRotation);
+                    break;
+
+                case PieceTypes.RZZ:
+                    newPiece = new RightZigZag(Content.Load<Texture2D>("NewPieces/RightZigZag"), startPoint, Color.Red, Vector2.One, RotationOptions.NoRotation);
+                    break;
+
+                case PieceTypes.Square:
+                    newPiece = new Square(Content.Load<Texture2D>("NewPieces/Square"), startPoint, Color.Yellow, Vector2.One, RotationOptions.NoRotation);
+                    break;
+
+                case PieceTypes.Straight:
+                    newPiece = new StraightPiece(Content.Load<Texture2D>("NewPieces/StraightPiece"), startPoint, Color.LightBlue, Vector2.One, RotationOptions.NoRotation);
+                    break;
+            }
+            
 
             return newPiece;
         }
@@ -160,46 +194,53 @@ namespace Tetris
 
             current.Update(gameTime);
 
-            // for(int i = 0; i < )
-
+         
             if (current.IsEnabled == false)
             {
                 var spots = current.GetMarkedSpots(current.RotationOption, current.Shape);
                 Texture2D textureToUse = null;
+                Color colorToUse = Color.White;
                 switch (current.PieceType)
                 {
                     case PieceTypes.LL:
-                        textureToUse = Content.Load<Texture2D>("OrangeCell");
+                        textureToUse = Content.Load<Texture2D>("Cells/LCell");
+                        colorToUse = Color.Orange;
                         break;
 
                     case PieceTypes.RL:
-                        textureToUse = Content.Load<Texture2D>("BlueCell");
+                        textureToUse = Content.Load<Texture2D>("Cells/LCell");
+                        colorToUse = Color.Blue;
                         break;
 
                     case PieceTypes.T:
-                        textureToUse = Content.Load<Texture2D>("PurpleCell");
+                        textureToUse = Content.Load<Texture2D>("Cells/TPieceCell");
+                        colorToUse = Color.Purple;
                         break;
 
                     case PieceTypes.LZZ:
-                        textureToUse = Content.Load<Texture2D>("GreenCell");
+                        textureToUse = Content.Load<Texture2D>("Cells/ZigZagCell");
+                        colorToUse = Color.Green;
                         break;
 
                     case PieceTypes.RZZ:
-                        textureToUse = Content.Load<Texture2D>("RedCell");
+                        textureToUse = Content.Load<Texture2D>("Cells/ZigZagCell");
+                        colorToUse = Color.Red;
                         break;
 
                     case PieceTypes.Square:
-                        textureToUse = Content.Load<Texture2D>("YellowCell");
+                        textureToUse = Content.Load<Texture2D>("Cells/SquareCell");
+                        colorToUse = Color.Yellow;
                         break;
 
                     case PieceTypes.Straight:
-                        textureToUse = Content.Load<Texture2D>("LightBlueCell");
+                        textureToUse = Content.Load<Texture2D>("Cells/StraightPieceCell");
+                        colorToUse = Color.LightBlue;
                         break;
                 }
                 for (int i = 0; i < spots[0].Count; i++)
                 {
                     var point = new Point(current.GridPosition.X + spots[0][i], current.GridPosition.Y + spots[1][i]);
-                    boomers.Add(new Cell(textureToUse, point, Color.White, Vector2.One));
+                    boomers.Add(new Cell(textureToUse, point, colorToUse, Vector2.One));
                 }
 
                 current = nextTiles[0];
@@ -305,12 +346,18 @@ namespace Tetris
 
             for (int i = 0; i < grid.GetLength(0) + 1; i++)
             {
-                spriteBatch.Draw(Game1.Pixel, new Rectangle((int)offSet.X, i * Game1.GridCellSize, grid.GetLength(1) * Game1.GridCellSize, 1), Color.White);
+                if (i == 0 || i == grid.GetLength(0))
+                {
+                    spriteBatch.Draw(Game1.Pixel, new Rectangle((int)offSet.X, i * Game1.GridCellSize, grid.GetLength(1) * Game1.GridCellSize, 1), Color.White);
+                }
             }
 
             for (int j = 0; j < grid.GetLength(1) + 1; j++)
             {
-                spriteBatch.Draw(Game1.Pixel, new Rectangle(j * Game1.GridCellSize + (int)offSet.X, 0, 1, Graphics.GraphicsDevice.Viewport.Height), Color.White);
+                if (j == 0 || j == grid.GetLength(1))
+                {
+                    spriteBatch.Draw(Game1.Pixel, new Rectangle(j * Game1.GridCellSize + (int)offSet.X, 0, 1, Graphics.GraphicsDevice.Viewport.Height), Color.White);
+                }
             }
 
             foreach (var tile in nextTiles)
