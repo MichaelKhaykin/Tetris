@@ -14,6 +14,10 @@ namespace Tetris
 
         public static KeyboardState OldKeyboardState;
 
+        public static MouseState MouseState;
+
+        public static MouseState OldMouseState;
+
         // NOTE: Not thread safe! I would implement IGameComponent instead,
         //       which does not require passing in the Game instance, and is
         //       therefore a much nicer implementation. 

@@ -8,7 +8,9 @@ namespace Tetris
 {
     public enum ScreenStates
     { 
+        None,
         Menu,
+        Settings,
         Game
     }
 

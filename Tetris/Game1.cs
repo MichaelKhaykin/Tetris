@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Tetris.Screens;
 
 namespace Tetris
 {
@@ -23,6 +24,7 @@ namespace Tetris
 
         public static List<Color> AllColors = new List<Color>();
 
+        public static Action GameExitDelegate;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -47,7 +49,9 @@ namespace Tetris
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            ScreenManager.CurrentScreen = ScreenStates.Game;
+            GameExitDelegate = new Action(() => Exit());
+
+            ScreenManager.ChangeScreen(ScreenStates.Menu);
 
             var infos = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
             int count = -1;
@@ -62,7 +66,8 @@ namespace Tetris
             Pixel = new Texture2D(GraphicsDevice, 1, 1);
             Pixel.SetData(new[] { Color.White });
 
-            ScreenManager.Screens.Add(ScreenStates.Game, new GameScreen(Content, graphics));
+            ScreenManager.AddScreen(ScreenStates.Menu, new MenuScreen(Content, graphics));
+            ScreenManager.AddScreen(ScreenStates.Game, new GameScreen(Content, graphics));
         }
 
         protected override void Update(GameTime gameTime)
@@ -71,10 +76,12 @@ namespace Tetris
                 Exit();
 
             InputManager.KeyboardState = Keyboard.GetState();
+            InputManager.MouseState = Mouse.GetState();
 
             ScreenManager.Update(gameTime);
 
             InputManager.OldKeyboardState = InputManager.KeyboardState;
+            InputManager.OldMouseState = InputManager.MouseState;
 
             base.Update(gameTime);
         }
@@ -85,6 +92,7 @@ namespace Tetris
             spriteBatch.Begin();
 
             ScreenManager.Draw(spriteBatch);
+
             
             spriteBatch.End();
             

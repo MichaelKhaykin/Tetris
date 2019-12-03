@@ -37,7 +37,16 @@ namespace Tetris
 
             for (int i = 0; i < 3; i++)
             {
-                nextTiles.Add(GeneratePiece(i));
+                var newPiece = GeneratePiece(i);
+                for (int j = 0; j < nextTiles.Count; j++)
+                {
+                    if (nextTiles[j].PieceType == newPiece.PieceType)
+                    {
+                        newPiece = GeneratePiece(i);
+                        j = 0;
+                    }
+                }
+                nextTiles.Add(newPiece);
             }
 
             current = GeneratePiece(0);
@@ -50,38 +59,6 @@ namespace Tetris
             var startPoint = new Point(-4, i * 4);
             BaseTetromino newPiece = null;
 
-            /*
-            switch (pieceTypeToCreate)
-            {
-                case PieceTypes.LL:
-                    newPiece = new LeftL(Content.Load<Texture2D>("LeftL"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                    break;
-
-                case PieceTypes.RL:
-                    newPiece = new RightL(Content.Load<Texture2D>("RightL"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                    break;
-
-                case PieceTypes.T:
-                    newPiece = new TPiece(Content.Load<Texture2D>("TPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                    break;
-
-                case PieceTypes.LZZ:
-                    newPiece = new LeftZigZag(Content.Load<Texture2D>("LeftZigZag"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                    break;
-
-                case PieceTypes.RZZ:
-                    newPiece = new RightZigZag(Content.Load<Texture2D>("RightZigZag"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                    break;
-
-                case PieceTypes.Square:
-                    newPiece = new Square(Content.Load<Texture2D>("Square"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                    break;
-
-                case PieceTypes.Straight:
-                    newPiece = new StraightPiece(Content.Load<Texture2D>("StraightPiece"), startPoint, Color.White, Vector2.One, RotationOptions.NoRotation);
-                    break;
-            }
-            */
             
             switch (pieceTypeToCreate)
             {
@@ -244,7 +221,7 @@ namespace Tetris
                 }
 
                 current = nextTiles[0];
-               current.GridPosition = new Point(4, -3);
+                current.GridPosition = new Point(4, -3);
 
                 nextTiles.RemoveAt(0);
 
@@ -253,7 +230,16 @@ namespace Tetris
                     tile.GridPosition.Y -= 4;
                 }
 
-                nextTiles.Add(GeneratePiece(2));
+                var newPiece = GeneratePiece(2);
+                for(int i = 0; i < nextTiles.Count; i++)
+                {
+                    if(nextTiles[i].PieceType == newPiece.PieceType)
+                    {
+                        newPiece = GeneratePiece(2);
+                        i = 0;
+                    }
+                }
+                nextTiles.Add(newPiece);
             }
 
 
