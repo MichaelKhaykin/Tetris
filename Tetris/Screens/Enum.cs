@@ -11,7 +11,8 @@ namespace Tetris
         None,
         Menu,
         Settings,
-        Game
+        SingePlayerGame,
+        MultiplayerGame
     }
 
     public enum RotationOptions

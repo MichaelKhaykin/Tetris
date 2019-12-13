@@ -35,22 +35,25 @@ namespace Tetris
         {
             offSet = new Vector2((Graphics.GraphicsDevice.Viewport.Width - grid.GetLength(1) * Game1.GridCellSize) / 2, 0);
 
-            for (int i = 0; i < 3; i++)
+            if (!Game1.isDebugMode)
             {
-                var newPiece = GeneratePiece(i);
-                for (int j = 0; j < nextTiles.Count; j++)
+                for (int i = 0; i < 3; i++)
                 {
-                    if (nextTiles[j].PieceType == newPiece.PieceType)
+                    var newPiece = GeneratePiece(i);
+                    for (int j = 0; j < nextTiles.Count; j++)
                     {
-                        newPiece = GeneratePiece(i);
-                        j = 0;
+                        if (nextTiles[j].PieceType == newPiece.PieceType)
+                        {
+                            newPiece = GeneratePiece(i);
+                            j = 0;
+                        }
                     }
+                    nextTiles.Add(newPiece);
                 }
-                nextTiles.Add(newPiece);
-            }
 
-            current = GeneratePiece(0);
-            current.GridPosition = new Point(4, -3);
+                current = GeneratePiece(0);
+                current.GridPosition = new Point(4, -3);
+            }
         }
 
         private BaseTetromino GeneratePiece(int i)
@@ -119,7 +122,9 @@ namespace Tetris
                 File.WriteAllText("gridRepresentation.txt", content);
             }
 
-            if (isPaused == true) return;
+            //check for receive
+
+            if (isPaused == true || Game1.isDebugMode) return;
 
             if (InputManager.KeyboardState.IsKeyDown(Keys.H) && InputManager.OldKeyboardState.IsKeyUp(Keys.H))
             {
@@ -345,6 +350,8 @@ namespace Tetris
                     spriteBatch.Draw(Game1.Pixel, new Rectangle(j * Game1.GridCellSize + (int)offSet.X, 0, 1, Graphics.GraphicsDevice.Viewport.Height), Color.White);
                 }
             }
+
+            if (Game1.isDebugMode) return;
 
             foreach (var tile in nextTiles)
             {

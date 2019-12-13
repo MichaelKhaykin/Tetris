@@ -25,10 +25,14 @@ namespace Tetris
         public static List<Color> AllColors = new List<Color>();
 
         public static Action GameExitDelegate;
-        public Game1()
+
+        public static bool isDebugMode = false;
+        public Game1(string arg)
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            isDebugMode = arg == "true";
         }
 
         protected override void Initialize()
@@ -67,7 +71,7 @@ namespace Tetris
             Pixel.SetData(new[] { Color.White });
 
             ScreenManager.AddScreen(ScreenStates.Menu, new MenuScreen(Content, graphics));
-            ScreenManager.AddScreen(ScreenStates.Game, new GameScreen(Content, graphics));
+            ScreenManager.AddScreen(ScreenStates.SingePlayerGame, new GameScreen(Content, graphics));
         }
 
         protected override void Update(GameTime gameTime)
