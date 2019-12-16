@@ -43,7 +43,9 @@
   <ItemGroup>
     <Compile Include="AdvancedShadowButton.cs" />
     <Compile Include="Screens\MenuScreen.cs" />
+    <Compile Include="Screens\MultiplayerGameScreen.cs" />
     <Compile Include="Screens\SettingsScreen.cs" />
+    <Compile Include="Screens\WaitingForMultiplayerGameScreen.cs" />
     <Compile Include="TetrisPieces\Cell.cs" />
     <Compile Include="Screens\Enum.cs" />
     <Compile Include="Game1.cs" />

@@ -12,9 +12,15 @@ namespace Tetris
         Menu,
         Settings,
         SingePlayerGame,
+        WaitingForMultiplayerGame,
         MultiplayerGame
     }
 
+    public enum WaitingLobbyStatus
+    { 
+        WaitingForSecondPlayer,
+        ReadyToStartGame
+    }
     public enum RotationOptions
     {
         NoRotation = 0,

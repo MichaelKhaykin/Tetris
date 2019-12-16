@@ -41,7 +41,11 @@ namespace Tetris.Screens
             multiplayerButton = new AdvancedShadowButton(multiplayerTexture, new Vector2(center.X, center.Y + multiplayerTexture.Height / 2 * multiplayerButtonScale.Y - 30), Color.White, multiplayerButtonScale, null, Color.LightBlue)
             {
                 DelayBeforeRunningAction = TimeSpan.FromMilliseconds(30),
-                ClickedAction = () => ScreenManager.ChangeScreen(ScreenStates.MultiplayerGame)
+                ClickedAction = () =>
+                {
+                    ScreenManager.AddScreen(ScreenStates.WaitingForMultiplayerGame, new WaitingForMultiplayerGameScreen(Content, graphics));
+                    ScreenManager.ChangeScreen(ScreenStates.WaitingForMultiplayerGame);
+                }  
             };
         
 
